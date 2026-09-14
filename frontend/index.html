@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecoOps | Real-Time Recommendation MLOps Platform</title>
+  <meta name="description" content="Production-grade real-time recommendation system featuring Two-Tower neural retrieval, Feast feature store, ANN search, streaming feedback, online learning, and MLOps drift monitoring.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Reco<span class="gradient-text">Ops</span></h1>
+          <span class="brand-sub">Real-Time Recommendation MLOps</span>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <div class="status-pill status-healthy" id="system-health-pill">
+          <span class="status-dot"></span>
+          <span id="system-health-text">System Healthy</span>
+        </div>
+
+        <div class="status-badge" id="model-badge">
+          <span class="badge-label">Model:</span>
+          <span class="badge-value" id="model-version-text">TwoTower:Prod</span>
+        </div>
+
+        <div class="status-badge">
+          <span class="badge-label">Feature Store:</span>
+          <span class="badge-value text-cyan">Feast (SQLite)</span>
+        </div>
+
+        <a href="/metrics" target="_blank" class="btn btn-ghost btn-sm" id="metrics-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          Prometheus
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <!-- Telemetry Cards Row -->
+    <section class="metrics-strip">
+      <div class="stat-card">
+        <div class="stat-icon icon-cyan">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Vector Catalog</span>
+          <span class="stat-value" id="stat-vector-items">500 Items</span>
+          <span class="stat-sub text-cyan">32-dim ANN Index</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-violet">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Inference Latency</span>
+          <span class="stat-value" id="stat-latency">~4.2 ms</span>
+          <span class="stat-sub text-emerald">SLA Compliant (&lt;100ms)</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-emerald">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Offline Evaluation (IPS)</span>
+          <span class="stat-value" id="stat-ips">6.6595</span>
+          <span class="stat-sub text-cyan">79.5k Logged Events</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-amber">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 14 14"></polyline>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <span class="stat-label">Doubly Robust (DR)</span>
+          <span class="stat-value" id="stat-dr">4.8595</span>
+          <span class="stat-sub text-amber">Bias-Corrected Estimator</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Content 2-Column Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column: Recommendation Studio -->
+      <section class="card studio-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <div class="card-badge">LIVE INFERENCE</div>
+            <h2>Recommendation Console</h2>
+          </div>
+          <div class="card-actions">
+            <span class="tag tag-dim" id="latency-tag">0.0 ms</span>
+          </div>
+        </div>
+
+        <!-- User Selector & Profile -->
+        <div class="user-selector-box">
+          <div class="user-input-group">
+            <label for="user-id-input">Target User ID:</label>
+            <div class="input-with-button">
+              <input type="number" id="user-id-input" value="0" min="0" max="999999" placeholder="Enter User ID">
+              <button class="btn btn-primary" id="btn-fetch-rec">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                Recommend
+              </button>
+            </div>
+          </div>
+
+          <div class="user-quick-chips">
+            <span class="quick-chip-label">Quick test:</span>
+            <button class="chip active" data-user="0">User 0 (Warm)</button>
+            <button class="chip" data-user="42">User 42 (Active)</button>
+            <button class="chip" data-user="89">User 89 (Frequent)</button>
+            <button class="chip chip-cold" data-user="999">User 999 (Cold-Start)</button>
+          </div>
+
+          <!-- User State Panel -->
+          <div class="user-state-card" id="user-state-panel">
+            <div class="state-item">
+              <span class="state-label">Cold-Start Status</span>
+              <span class="state-value tag tag-emerald" id="user-cold-tag">Warm User (Feast Profile Active)</span>
+            </div>
+            <div class="state-item">
+              <span class="state-label">A/B Testing Variant</span>
+              <span class="state-value tag tag-violet" id="user-variant-tag">Variant: Canary</span>
+            </div>
+            <div class="state-item">
+              <span class="state-label">Online Features (Feast)</span>
+              <div class="features-row">
+                <span class="feature-bubble" id="feat-views">Views: <strong>0</strong></span>
+                <span class="feature-bubble" id="feat-clicks">Clicks: <strong>0</strong></span>
+                <span class="feature-bubble" id="feat-purchases">Purchases: <strong>0</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommendations Grid -->
+        <div class="recommendations-container">
+          <div class="rec-header">
+            <h3>Top Recommended Candidates</h3>
+            <span class="rec-subtitle" id="rec-explanation">Personalized neural ANN ranking (Two-Tower + IP similarity)</span>
+          </div>
+
+          <div class="items-grid" id="recommendations-grid">
+            <!-- Dynamically populated item cards -->
+            <div class="empty-placeholder">Loading recommendations...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Streaming, Online Learning & MLOps Monitoring -->
+      <div class="right-stack">
+        <!-- Panel 1: Streaming & Online Learning -->
+        <section class="card stream-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-badge badge-stream">STREAMING & ONLINE LEARNING</div>
+              <h2>Real-Time Adaptation</h2>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-burst-stream">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              Simulate Event Burst
+            </button>
+          </div>
+
+          <div class="online-stats-bar">
+            <div class="online-stat">
+              <span class="online-stat-title">Online Learning Status</span>
+              <span class="online-stat-val text-emerald">Active (PyTorch Backprop)</span>
+            </div>
+            <div class="online-stat">
+              <span class="online-stat-title">Latest Gradient Loss</span>
+              <span class="online-stat-val text-cyan" id="latest-loss-text">0.6592</span>
+            </div>
+            <div class="online-stat">
+              <span class="online-stat-title">Events Ingested</span>
+              <span class="online-stat-val text-violet" id="events-count-text">0</span>
+            </div>
+          </div>
+
+          <div class="stream-log-container">
+            <div class="stream-log-header">
+              <span>Live Interaction Event Stream</span>
+              <span class="pulse-live">LIVE</span>
+            </div>
+            <div class="stream-log-list" id="stream-events-list">
+              <div class="stream-empty">Waiting for interactions (Click any action button on the left)...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel 2: MLOps Drift & Fairness Lab -->
+        <section class="card monitoring-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-badge badge-mlops">MLOPS MONITORING</div>
+              <h2>Drift, Fairness & Retraining</h2>
+            </div>
+          </div>
+
+          <div class="drift-testing-box">
+            <div class="drift-row">
+              <div class="drift-info">
+                <h4>Data & Concept Drift Detector</h4>
+                <p class="drift-desc">Simulate distribution shifts in feature space to test automated watchdog alerting.</p>
+              </div>
+              <div class="drift-actions">
+                <button class="btn btn-sm btn-ghost" id="btn-drift-normal">Normal Test</button>
+                <button class="btn btn-sm btn-danger" id="btn-drift-shift">Inject 10x Drift</button>
+              </div>
+            </div>
+            <div class="drift-status-banner" id="drift-status-banner">
+              <span class="drift-status-text" id="drift-status-text">Drift Check: Operational (No Shift Detected)</span>
+            </div>
+          </div>
+
+          <div class="mlops-grid-2">
+            <div class="mini-box">
+              <div class="mini-box-title">Gini Fairness Index</div>
+              <div class="mini-box-val" id="gini-score-text">0.7500</div>
+              <div class="mini-box-sub text-cyan">Catalog exposure distribution</div>
+            </div>
+            <div class="mini-box">
+              <div class="mini-box-title">Retraining Trigger</div>
+              <button class="btn btn-primary btn-sm btn-block" id="btn-trigger-retrain">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg>
+                Retrain Two-Tower
+              </button>
+              <div class="retrain-progress hidden" id="retrain-progress">
+                <div class="spinner-sm"></div>
+                <span>Training epochs & logging to MLflow...</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <span>RecoOps Platform &bull; Real-Time Recommendation Architecture with MLflow, Feast, Milvus & PyTorch</span>
+      <span class="text-dim">Local Runtime Mode</span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

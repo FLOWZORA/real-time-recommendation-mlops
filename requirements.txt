@@ -6,3 +6,10 @@ feast
 pymilvus
 evidently
 prometheus-client
+mlflow
+pandas
+numpy
+jsonschema
+pydantic
+pyarrow
+

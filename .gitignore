@@ -11,13 +11,15 @@ venv/
 
 # MLflow
 mlruns/
-mlflow.db
 
 # Data / artifacts
-*.pt
-*.npy
-*.parquet
 *.log
+!two_tower.pt
+!item_embeddings.npy
+!feature_store/data/*.parquet
+!feature_store/data/*.db
+!mlflow.db
+
 
 # OS
 .DS_Store

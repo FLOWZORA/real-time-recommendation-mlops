@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+repo_root = Path(__file__).resolve().parent.parent
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -32,19 +39,27 @@ def train():
 
 
 if __name__ == "__main__":
-    with mlflow.start_run(run_name="two_tower_training"):
-        mlflow.log_param("epochs", EPOCHS)
-        mlflow.log_param("lr", LR)
-        mlflow.log_param("embedding_dim", 8)
+    model, final_loss = train()
+    print(f"[OK] Training complete with final loss: {final_loss:.4f}")
 
-        model, final_loss = train()
+    # Save local checkpoint
+    torch.save(model.state_dict(), repo_root / "two_tower.pt")
+    torch.save(model.state_dict(), repo_root / "retrieval" / "two_tower.pt")
+    print("[OK] Saved local weights to two_tower.pt")
 
-        mlflow.log_metric("final_loss", final_loss)
+    try:
+        with mlflow.start_run(run_name="two_tower_training"):
+            mlflow.log_param("epochs", EPOCHS)
+            mlflow.log_param("lr", LR)
+            mlflow.log_param("embedding_dim", 8)
+            mlflow.log_metric("final_loss", final_loss)
 
-        mlflow.pytorch.log_model(
-            model,
-            artifact_path="model",
-            registered_model_name="TwoTowerRecommender",
-        )
+            mlflow.pytorch.log_model(
+                model,
+                artifact_path="model",
+                registered_model_name="TwoTowerRecommender",
+            )
+            print("[OK] Model successfully registered to MLflow")
+    except Exception as e:
+        print(f"[WARN] Could not log to MLflow ({e}). Local weights saved successfully.")
 
-        print("✅ Training complete & model logged to MLflow")

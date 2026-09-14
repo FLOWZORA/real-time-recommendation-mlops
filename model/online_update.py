@@ -8,17 +8,18 @@ _loss_fn = torch.nn.BCEWithLogitsLoss()
 def init_online_learning(model):
     global _optimizer
     _optimizer = Adam(model.user.parameters(), lr=1e-3)
-    print("✅ Online learning optimizer initialized")
+    print("[OK] Online learning optimizer initialized")
 
 
 def online_update(model, user_features, item_features, label: float):
+    global _optimizer
     if _optimizer is None:
-        raise RuntimeError("Online learning optimizer not initialized")
+        init_online_learning(model)
 
     model.train()
 
-    score = model(user_features, item_features)
-    target = torch.tensor([label], dtype=torch.float32)
+    score = model(user_features, item_features).view(-1)
+    target = torch.tensor([float(label)], dtype=torch.float32).view(-1)
 
     loss = _loss_fn(score, target)
 
@@ -26,7 +27,12 @@ def online_update(model, user_features, item_features, label: float):
     loss.backward()
     _optimizer.step()
 
-    # Log online loss to MLflow
-    mlflow.log_metric("online_loss", loss.item())
+    # Log online loss to MLflow if active run exists
+    try:
+        if mlflow.active_run():
+            mlflow.log_metric("online_loss", loss.item())
+    except Exception:
+        pass
 
     return loss.item()
+
