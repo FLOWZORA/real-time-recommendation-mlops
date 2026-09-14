@@ -17,9 +17,12 @@ RUN pip install --no-cache-dir -r requirements.txt --extra-index-url https://dow
 
 COPY . .
 
+# Intercept uvicorn so even if Railway UI executes 'uvicorn ... --port $PORT', it never crashes
+RUN cp run_server.py /usr/local/bin/uvicorn && chmod +x /usr/local/bin/uvicorn
+
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8080
 EXPOSE 8000
 
-CMD ["python", "-m", "serving.app"]
+CMD ["python", "run_server.py", "serving.app:app", "--host", "0.0.0.0", "--port", "8080"]
