@@ -22,4 +22,4 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 8080
 EXPOSE 8000
 
-CMD ["sh", "-c", "python -m uvicorn serving.app:app --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["python", "-m", "serving.app"]
