@@ -8,13 +8,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
 COPY requirements.txt .
 
-# Install CPU-only torch first (180MB vs 2.5GB CUDA) to prevent Railway memory limits
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
-
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies using CPU PyTorch wheel index
+RUN pip install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
 COPY . .
 
