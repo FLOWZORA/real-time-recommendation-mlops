@@ -85,6 +85,8 @@ def health():
 def metrics():
     return Response(generate_latest(), media_type="text/plain")
 
+from features.catalog_data import get_item_metadata, get_user_persona
+
 # -----------------------------
 # Core Recommendation Endpoint
 # -----------------------------
@@ -96,6 +98,7 @@ def recommend(user_id: int):
     # 1. Get user features + cold-start flag
     user_features, is_cold = get_user_features(user_id)
     features_list = user_features[0].tolist()
+    persona = get_user_persona(user_id)
 
     # 2. Cold-start handling
     if is_cold:
@@ -106,6 +109,7 @@ def recommend(user_id: int):
 
         detailed_items = [
             {
+                **get_item_metadata(i_id),
                 "item_id": i_id,
                 "relevance_score": 0.5,
                 "popularity": 10 - idx,
@@ -117,6 +121,7 @@ def recommend(user_id: int):
 
         return {
             "user_id": user_id,
+            "persona": persona,
             "cold_start": True,
             "strategy": result["strategy"],
             "recommendations": result["items"],
@@ -127,7 +132,7 @@ def recommend(user_id: int):
                 "total_purchases": int(features_list[2]),
             },
             "latency_ms": round(latency * 1000, 2),
-            "explanation": "Cold-start fallback: popular trending items across all users",
+            "explanation": "Cold-start fallback: popular trending workspace & audio gear across all customers",
         }
 
     # 3. User embedding
@@ -148,16 +153,25 @@ def recommend(user_id: int):
     top_candidates = ranked[:10]
     top_items = [x["item_id"] for x in top_candidates]
 
+    enriched_candidates = [
+        {
+            **cand,
+            **get_item_metadata(cand["item_id"])
+        }
+        for cand in top_candidates
+    ]
+
     RECOMMENDATION_COUNT.inc()
     latency = time.time() - start_time
     REQUEST_LATENCY.labels("/recommend").observe(latency)
 
     return {
         "user_id": user_id,
+        "persona": persona,
         "cold_start": False,
         "variant": assign(user_id),
         "recommendations": top_items,
-        "detailed_recommendations": top_candidates,
+        "detailed_recommendations": enriched_candidates,
         "user_features": {
             "total_views": int(features_list[0]),
             "total_clicks": int(features_list[1]),
@@ -193,15 +207,20 @@ def interact(req: InteractionRequest):
 
     process_event(event)
 
-    # Retrieve updated user features
+    # Retrieve updated user features & metadata
     user_features, is_cold = get_user_features(req.user_id)
     features_list = user_features[0].tolist()
     reward = get_reward(req.action)
+    item_info = get_item_metadata(req.item_id)
+    persona = get_user_persona(req.user_id)
 
     return {
         "status": "success",
         "user_id": req.user_id,
+        "user_name": persona["name"],
         "item_id": req.item_id,
+        "item_title": item_info["title"],
+        "item_category": item_info["category"],
         "action": req.action,
         "reward": reward,
         "updated_features": {
@@ -211,6 +230,7 @@ def interact(req: InteractionRequest):
         },
         "timestamp": event["timestamp"],
     }
+
 
 @app.get("/api/system-status")
 def system_status():

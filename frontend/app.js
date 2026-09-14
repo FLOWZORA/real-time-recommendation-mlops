@@ -137,6 +137,18 @@ function renderUserStatus(data) {
     variantTag.textContent = `A/B Variant: ${data.variant || 'Canary'}`;
   }
 
+  // Update Persona banner
+  if (data.persona) {
+    const avatarEl = document.getElementById('persona-avatar');
+    const nameEl = document.getElementById('persona-name');
+    const roleEl = document.getElementById('persona-role');
+    const segmentEl = document.getElementById('persona-segment');
+    if (avatarEl) avatarEl.textContent = data.persona.avatar || '👤';
+    if (nameEl) nameEl.textContent = data.persona.name || `User ${data.user_id}`;
+    if (roleEl) roleEl.textContent = data.persona.role || 'Active Shopper';
+    if (segmentEl) segmentEl.textContent = `${data.persona.segment} • ${data.persona.bio}`;
+  }
+
   // Update Feast feature counters
   if (data.user_features) {
     document.getElementById('feat-views').innerHTML = `Views: <strong>${data.user_features.total_views}</strong>`;
@@ -155,8 +167,14 @@ function renderRecommendations(data) {
   const grid = document.getElementById('recommendations-grid');
   grid.innerHTML = '';
 
-  const items = data.detailed_recommendations || data.recommendations.map(id => ({
+  const items = data.detailed_recommendations || (data.recommendations || []).map(id => ({
     item_id: id,
+    name: `Pro Gear Tech #${id}`,
+    category: 'Hardware & Tech',
+    price: 99.99,
+    rating: 4.8,
+    reviews: 120,
+    badge: 'FEATURED',
     relevance_score: 0.8,
     popularity: 5,
     recency: 0.5,
@@ -171,13 +189,26 @@ function renderRecommendations(data) {
     const popPct = Math.round(((item.popularity || 5) / 10) * 100);
     const recPct = Math.round((item.recency || 0.5) * 100);
     const finalScore = item.score !== undefined ? item.score.toFixed(3) : (item.relevance_score || 0.85).toFixed(3);
+    const priceStr = typeof item.price === 'number' ? `$${item.price.toFixed(2)}` : `$${item.price || '99.99'}`;
+    const badgeHtml = item.badge ? `<span class="item-badge-pill">${item.badge}</span>` : '';
 
     card.innerHTML = `
       <div class="item-card-top">
         <div class="item-id-badge">
           <span class="item-rank-num">#${index + 1}</span>
-          <span>Item ${item.item_id}</span>
+          <span class="item-category-tag">${item.category || 'Tech'}</span>
         </div>
+        ${badgeHtml}
+      </div>
+
+      <div class="item-title" title="${item.name || `Item ${item.item_id}`}">${item.name || `Item #${item.item_id}`}</div>
+
+      <div class="item-price-row">
+        <span class="item-price">${priceStr}</span>
+        <span class="item-rating">
+          <span class="star-gold">★</span> ${item.rating || 4.8}
+          <span>(${item.reviews || 42})</span>
+        </span>
         <div class="item-score-pill">Score: ${finalScore}</div>
       </div>
 
@@ -197,13 +228,13 @@ function renderRecommendations(data) {
       </div>
 
       <div class="item-actions">
-        <button class="btn-action btn-view" onclick="triggerInteraction(${data.user_id}, ${item.item_id}, 'view')">
+        <button class="btn-action btn-view" onclick="triggerInteraction(${data.user_id}, ${item.item_id}, 'view', '${encodeURIComponent(item.name || '')}', ${item.price || 0})">
           👁️ View
         </button>
-        <button class="btn-action btn-click" onclick="triggerInteraction(${data.user_id}, ${item.item_id}, 'click')">
+        <button class="btn-action btn-click" onclick="triggerInteraction(${data.user_id}, ${item.item_id}, 'click', '${encodeURIComponent(item.name || '')}', ${item.price || 0})">
           🖱️ Click
         </button>
-        <button class="btn-action btn-purchase" onclick="triggerInteraction(${data.user_id}, ${item.item_id}, 'purchase')">
+        <button class="btn-action btn-purchase" onclick="triggerInteraction(${data.user_id}, ${item.item_id}, 'purchase', '${encodeURIComponent(item.name || '')}', ${item.price || 0})">
           💳 Buy
         </button>
       </div>
@@ -214,7 +245,8 @@ function renderRecommendations(data) {
 }
 
 // Interactive Live Feedback Handler
-window.triggerInteraction = async function(userId, itemId, action) {
+window.triggerInteraction = async function(userId, itemId, action, encodedName = '', price = 0) {
+  const fallbackItemName = encodedName ? decodeURIComponent(encodedName) : `Item #${itemId}`;
   try {
     const res = await fetch('/api/interact', {
       method: 'POST',
@@ -229,7 +261,7 @@ window.triggerInteraction = async function(userId, itemId, action) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const result = await res.json();
 
-    // Update Feast counts on UI
+    // Update Feast counts on UI if returned
     if (result.updated_features) {
       document.getElementById('feat-views').innerHTML = `Views: <strong>${result.updated_features.total_views}</strong>`;
       document.getElementById('feat-clicks').innerHTML = `Clicks: <strong>${result.updated_features.total_clicks}</strong>`;
@@ -244,7 +276,10 @@ window.triggerInteraction = async function(userId, itemId, action) {
     // Add to Stream Log
     addStreamLogEntry({
       user_id: userId,
+      user_name: result.user_name || `User ${userId}`,
       item_id: itemId,
+      item_name: result.item_name || fallbackItemName,
+      price: price,
       action: action,
       reward: result.reward,
       timestamp: new Date().toLocaleTimeString()
@@ -272,11 +307,20 @@ function addStreamLogEntry(entry) {
   const item = document.createElement('div');
   item.className = `stream-item action-${entry.action}`;
 
+  const actionVerbs = {
+    view: 'viewed',
+    click: 'clicked',
+    purchase: 'purchased'
+  };
+  const verb = actionVerbs[entry.action] || entry.action;
+  const userName = entry.user_name || `User ${entry.user_id}`;
+  const itemName = entry.item_name || `Item #${entry.item_id}`;
+
   item.innerHTML = `
     <div class="stream-item-main">
-      <span class="stream-item-action">${entry.action}</span>
-      <span>User <strong>${entry.user_id}</strong> &rarr; Item <strong>${entry.item_id}</strong></span>
-      <span class="stream-item-reward">Reward: +${entry.reward.toFixed(1)}</span>
+      <span class="stream-item-action">${entry.action.toUpperCase()}</span>
+      <span><strong>${userName}</strong> ${verb} <strong>${itemName}</strong></span>
+      <span class="stream-item-reward">Reward: +${Number(entry.reward).toFixed(1)}</span>
     </div>
     <span class="stream-item-time">${entry.timestamp}</span>
   `;
@@ -293,7 +337,7 @@ function addStreamLogEntry(entry) {
 async function simulateStreamBurst() {
   const actions = ['view', 'click', 'purchase'];
   for (let i = 0; i < 4; i++) {
-    const randomUser = Math.floor(Math.random() * 100);
+    const randomUser = [0, 42, 89, 999, Math.floor(Math.random() * 100)][Math.floor(Math.random() * 5)];
     const randomItem = Math.floor(Math.random() * 500);
     const randomAction = actions[Math.floor(Math.random() * actions.length)];
 

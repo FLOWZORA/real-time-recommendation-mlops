@@ -148,32 +148,46 @@
           </div>
 
           <div class="user-quick-chips">
-            <span class="quick-chip-label">Quick test:</span>
-            <button class="chip active" data-user="0">User 0 (Warm)</button>
-            <button class="chip" data-user="42">User 42 (Active)</button>
-            <button class="chip" data-user="89">User 89 (Frequent)</button>
-            <button class="chip chip-cold" data-user="999">User 999 (Cold-Start)</button>
+            <span class="quick-chip-label">Test Personas:</span>
+            <button class="chip active" data-user="0">👨‍💻 Alex Chen (Audiophile)</button>
+            <button class="chip" data-user="42">🎙️ Sarah J. (Creator)</button>
+            <button class="chip" data-user="89">⚡ Marcus V. (Smart Office)</button>
+            <button class="chip chip-cold" data-user="999">✨ Elena R. (Cold-Start Guest)</button>
           </div>
 
           <!-- User State Panel -->
           <div class="user-state-card" id="user-state-panel">
-            <div class="state-item">
-              <span class="state-label">Cold-Start Status</span>
-              <span class="state-value tag tag-emerald" id="user-cold-tag">Warm User (Feast Profile Active)</span>
+            <div class="persona-banner">
+              <div class="persona-avatar" id="persona-avatar">👨‍💻</div>
+              <div class="persona-info">
+                <div class="persona-title-row">
+                  <span class="persona-name" id="persona-name">Alex Chen</span>
+                  <span class="persona-role" id="persona-role">Software Architect & Audiophile</span>
+                </div>
+                <span class="persona-segment" id="persona-segment">High-Affinity Tech & Audio (Warm Profile)</span>
+              </div>
             </div>
-            <div class="state-item">
-              <span class="state-label">A/B Testing Variant</span>
-              <span class="state-value tag tag-violet" id="user-variant-tag">Variant: Canary</span>
-            </div>
-            <div class="state-item">
-              <span class="state-label">Online Features (Feast)</span>
-              <div class="features-row">
-                <span class="feature-bubble" id="feat-views">Views: <strong>0</strong></span>
-                <span class="feature-bubble" id="feat-clicks">Clicks: <strong>0</strong></span>
-                <span class="feature-bubble" id="feat-purchases">Purchases: <strong>0</strong></span>
+
+            <div class="state-grid-row">
+              <div class="state-item">
+                <span class="state-label">Cold-Start Status</span>
+                <span class="state-value tag tag-emerald" id="user-cold-tag">Warm User (Feast Profile Active)</span>
+              </div>
+              <div class="state-item">
+                <span class="state-label">A/B Testing Variant</span>
+                <span class="state-value tag tag-violet" id="user-variant-tag">Variant: Canary</span>
+              </div>
+              <div class="state-item">
+                <span class="state-label">Online Features (Feast)</span>
+                <div class="features-row">
+                  <span class="feature-bubble" id="feat-views">Views: <strong>0</strong></span>
+                  <span class="feature-bubble" id="feat-clicks">Clicks: <strong>0</strong></span>
+                  <span class="feature-bubble" id="feat-purchases">Purchases: <strong>0</strong></span>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
 
         <!-- Recommendations Grid -->
