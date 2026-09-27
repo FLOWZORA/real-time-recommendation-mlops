@@ -12,7 +12,8 @@ from retrieval.two_tower import TwoTower
 
 def generate_embeddings(num_items=500):
     repo_root = Path(__file__).resolve().parent.parent
-    
+    from features.catalog_data import get_item_feature_vector
+
     # Locate checkpoint
     model_path = None
     for p in [repo_root / "two_tower.pt", repo_root / "retrieval" / "two_tower.pt"]:
@@ -33,8 +34,9 @@ def generate_embeddings(num_items=500):
 
     model.eval()
 
-    # Example item features
-    item_features = torch.rand(num_items, 8)
+    # Build genuine item feature vectors based on catalog categories
+    item_features_list = [get_item_feature_vector(i) for i in range(num_items)]
+    item_features = torch.tensor(np.array(item_features_list), dtype=torch.float32)
 
     with torch.no_grad():
         embeddings = model.item(item_features).numpy()
@@ -49,4 +51,5 @@ def generate_embeddings(num_items=500):
 
 if __name__ == "__main__":
     generate_embeddings()
+
 

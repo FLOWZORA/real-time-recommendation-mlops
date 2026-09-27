@@ -1,0 +1,16 @@
+{
+  "name": "recommendation-os",
+  "version": "1.0.0",
+  "description": "RecommendationOS - Production-style real-time recommendation platform",
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "start": "npm --prefix web run start",
+    "lint": "npm --prefix web run lint",
+    "dashboard:dev": "npm --prefix datta-able-free-tailwind-nextjs-admin-template run dev",
+    "dashboard:build": "npm --prefix datta-able-free-tailwind-nextjs-admin-template run build"
+  },
+  "keywords": ["recommendation-system", "mlops", "nextjs", "fastapi"],
+  "author": "Vaibhav Tiwari",
+  "license": "MIT"
+}

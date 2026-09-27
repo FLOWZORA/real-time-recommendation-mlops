@@ -1,12 +1,13 @@
 def rank_items(candidates):
     """
-    candidates: list of dicts
+    Ranks candidate items based on combined neural relevance, popularity, and recency.
     """
     def score(x):
         return (
-            0.6 * x["relevance_score"]
-            + 0.3 * x["popularity"]
-            + 0.1 * x["recency"]
+            0.70 * x.get("relevance_score", 0.5)
+            + 0.20 * x.get("popularity", 0.5)
+            + 0.10 * x.get("recency", 0.5)
         )
 
     return sorted(candidates, key=score, reverse=True)
+

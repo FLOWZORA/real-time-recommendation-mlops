@@ -28,3 +28,14 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Node / Frontend
+node_modules/
+.next/
+web/.next/
+web/node_modules/
+datta-able-free-tailwind-nextjs-admin-template/
+.vercel/
+
+# Local agents / IDE
+.agents/

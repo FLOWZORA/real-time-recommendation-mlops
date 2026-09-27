@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f4f7fa;
+  --foreground: #1d2630;
+  --datta-gradient: linear-gradient(to right, #1dc4e9, #a389d4);
+  --datta-teal: linear-gradient(to right, #04a9f5, #1de9b6);
+}
+
+.dark {
+  --background: #18191b;
+  --foreground: #e8edf7;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  min-height: 100vh;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Datta Able Card System */
+.datta-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .datta-card {
+  background-color: #2b2c2f;
+  border-color: #393b3f;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.25);
+}
+
+.datta-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(69, 90, 100, 0.12);
+}
+
+/* Datta Signature Gradients */
+.datta-gradient-bg {
+  background: linear-gradient(135deg, #1dc4e9 0%, #a389d4 100%);
+}
+
+.datta-gradient-text {
+  background: linear-gradient(135deg, #1dc4e9 0%, #a389d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.datta-teal-bg {
+  background: linear-gradient(135deg, #04a9f5 0%, #1de9b6 100%);
+}
+
+/* Header & Glassmorphism helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-panel {
+  background: rgba(33, 34, 36, 0.85);
+  border-bottom: 1px solid #393b3f;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f4f7fa;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

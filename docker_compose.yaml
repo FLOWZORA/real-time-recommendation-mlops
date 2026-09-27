@@ -1,7 +1,59 @@
 services:
+  # -----------------------------
+  # Core Application & Data Stack
+  # -----------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: reco_postgres
+    profiles: ["core", "all"]
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: reco_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: reco_redis
+    profiles: ["core", "all"]
+    ports:
+      - "6379:6379"
+
+  api:
+    build: .
+    container_name: reco_api
+    profiles: ["core", "all"]
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql://postgres:postgrespassword@postgres:5432/reco_db
+      REDIS_URL: redis://redis:6379/0
+      PORT: 8080
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: reco_web
+    profiles: ["core", "all"]
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+
+  # -----------------------------
+  # ML Vector Search Stack
+  # -----------------------------
   etcd:
     image: quay.io/coreos/etcd:v3.5.5
     container_name: etcd
+    profiles: ["ml", "all"]
     environment:
       ETCD_AUTO_COMPACTION_MODE: revision
       ETCD_AUTO_COMPACTION_RETENTION: "1000"
@@ -17,6 +69,7 @@ services:
   minio:
     image: minio/minio:RELEASE.2023-12-23T07-19-11Z
     container_name: minio
+    profiles: ["ml", "all"]
     environment:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
@@ -27,6 +80,7 @@ services:
   milvus:
     image: milvusdb/milvus:v2.3.3
     container_name: milvus
+    profiles: ["ml", "all"]
     depends_on:
       - etcd
       - minio
@@ -37,20 +91,25 @@ services:
     ports:
       - "19530:19530"
       - "9091:9091"
-  redis:
-    image: redis:7
-    container_name: redis
-    ports:
-      - "6379:6379"
+
+  # -----------------------------
+  # Observability Stack
+  # -----------------------------
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    profiles: ["observability", "all"]
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+
   grafana:
     image: grafana/grafana
     container_name: grafana
+    profiles: ["observability", "all"]
     ports:
       - "3000:3000"
+
+volumes:
+  pgdata:

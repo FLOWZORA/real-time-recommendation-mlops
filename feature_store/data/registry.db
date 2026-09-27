@@ -11,22 +11,24 @@ C
 #
 __dummy"
 __dummy_idJreco_project
-©€ğÊ°ÅÎŸ¡âŸÕ˜êÜŸ1"$877bd31e-5634-4ff0-8d8a-50233cb4edbd*­âŸÕ€»Ô2­
+©€ğÊ°ÅÎŸ¡âŸÕ˜êÜŸ1"$f254051b-e2fd-421f-b300-00ee3f637d59*ˆùŸÕø»²‹2É
 ï
 item_featuresreco_projectitem_id"
 
 popularity2€£:¡event_timestampZdata/item_features.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢data/item_features.parquet’©€ğÊÀè³‘"©€ğÊÔ@b
-item_id9
-©€ğÊè™‘Ÿ­âŸÕ°³±
-¬ûšÆøœÄº¬âŸÕøœÄº2Õ
+item_idU
+©€ğÊè™‘ŸˆùŸÕÀ‹y
+¬ûšÆøœÄº¬âŸÕøœÄº
+ˆ’›Æ¸ÿú-ˆùŸÕ¸ÿú-2ò
 —
 user_featuresreco_projectuser_id"
 total_views"
 total_clicks"
 total_purchases2€£:¡event_timestampZdata/user_features.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢data/user_features.parquet’©€ğÊÀè³‘"©€ğÊÔ@b
-user_id9
-©€ğÊè™‘Ÿ­âŸÕ€»Ô
-¬ûšÆøœÄº¬âŸÕøœÄºb°event_timestampZdata/item_features.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢data/item_features.parquetªreco_project’©€ğÊÀè³‘"©€ğÊÔb°event_timestampZdata/user_features.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢data/user_features.parquetªreco_project’©€ğÊÀè³‘"©€ğÊÔŠ.
+user_idV
+©€ğÊè™‘ŸˆùŸÕø¡‘‹
+¬ûšÆøœÄº¬âŸÕøœÄº
+ˆ’›Æ¸ÿú-ˆùŸÕ¸ÿú-b°event_timestampZdata/item_features.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢data/item_features.parquetªreco_project’©€ğÊÀè³‘"©€ğÊÔb°event_timestampZdata/user_features.parquetŠ1feast.infra.offline_stores.file_source.FileSource¢data/user_features.parquetªreco_project’©€ğÊÀè³‘"©€ğÊÔŠ.
 
 reco_project
 ©€ğÊÀñ­’©€ğÊÀñ­’

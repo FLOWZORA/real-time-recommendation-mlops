@@ -36,8 +36,51 @@ from retraining.trigger import trigger_retraining
 # Prometheus imports
 # -----------------------------
 from prometheus_client import Counter, Histogram, generate_latest
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Real-Time Recommendation MLOps Platform")
+# Domain v1 routers
+from api.routes.v1_auth import router as auth_router
+from api.routes.v1_products import router as products_router
+from api.routes.v1_events import router as events_router
+from api.routes.v1_recommendations import router as recommendations_router
+from api.routes.v1_analytics import router as analytics_router
+from api.routes.v1_models import router as models_router
+from api.routes.v1_experiments import router as experiments_router
+from api.routes.v1_apikeys import router as apikeys_router
+from api.init_db import init_db
+
+app = FastAPI(
+    title="RecommendationOS — Real-Time Recommendation MLOps Platform",
+    description="Multi-tenant, real-time recommendation platform for e-commerce applications.",
+    version="1.0.0",
+)
+
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Startup hook to ensure database is initialized and seeded
+@app.on_event("startup")
+def on_startup():
+    try:
+        init_db()
+    except Exception as e:
+        print(f"[WARN] Startup DB initialization notice: {e}")
+
+# Include domain v1 routers
+app.include_router(auth_router)
+app.include_router(products_router)
+app.include_router(events_router)
+app.include_router(recommendations_router)
+app.include_router(analytics_router)
+app.include_router(models_router)
+app.include_router(experiments_router)
+app.include_router(apikeys_router)
 
 repo_root = Path(__file__).resolve().parent.parent
 frontend_dir = repo_root / "frontend"

@@ -159,38 +159,98 @@ def get_item_metadata(item_id: int) -> dict:
         "badge": "Popular"
     }
 
+CAT_NAME_TO_INDEX = {
+    "Audio & Sound": 0,
+    "Computing & Displays": 1,
+    "Keyboards & Peripherals": 2,
+    "Creator & Studio": 3,
+    "Smart Home & Power": 4,
+    "Workspace & Lifestyle": 5,
+}
+
+INDEX_TO_CAT_NAME = {v: k for k, v in CAT_NAME_TO_INDEX.items()}
+
+def get_item_feature_vector(item_id: int):
+    """
+    Returns an 8-dimensional feature vector for item_id:
+    Dims 0..5: Normalized category distribution
+    Dim 6: Normalized price (price / 1000)
+    Dim 7: Normalized rating (rating / 5.0)
+    """
+    import numpy as np
+    meta = get_item_metadata(item_id)
+    cat = meta.get("category", "Audio & Sound")
+    idx = CAT_NAME_TO_INDEX.get(cat, 0)
+    vec = np.zeros(8, dtype=np.float32)
+    vec[idx] = 1.0
+
+    # Cross-category affinity
+    if cat == "Audio & Sound":
+        vec[3] = 0.15  # Audio gear complements creator & studio
+    elif cat == "Creator & Studio":
+        vec[0] = 0.20  # Creator studio uses audio gear
+    elif cat == "Computing & Displays":
+        vec[2] = 0.25  # Displays use keyboards
+    elif cat == "Keyboards & Peripherals":
+        vec[1] = 0.25  # Keyboards connect to computers
+    elif cat == "Workspace & Lifestyle":
+        vec[1] = 0.15
+        vec[2] = 0.15
+
+    price = float(meta.get("price", 99.0))
+    rating = float(meta.get("rating", 4.5))
+    vec[6] = min(price / 1000.0, 1.0)
+    vec[7] = min(rating / 5.0, 1.0)
+    return vec
+
 USER_PERSONAS = {
     0: {
         "name": "Alex Chen",
-        "role": "Software Architect & Audiophile",
-        "avatar": "👨‍💻",
-        "segment": "High-Affinity Tech & Audio",
+        "role": "Audiophile & Music Producer",
+        "avatar": "🎧",
+        "segment": "Audio & Hi-Fi Gear",
         "status_detail": "Warm Profile (18 views, 6 clicks, 2 purchases in Feast)",
-        "affinity_tags": ["Audio", "Keyboards", "Displays"]
+        "affinity_tags": ["Audio & Sound", "Creator & Studio"],
+        "primary_cat": "Audio & Sound",
+        "primary_cat_idx": 0,
+        "views": 18, "clicks": 6, "purchases": 2,
+        "feature_vector": [1.0, 0.05, 0.0, 0.15, 0.0, 0.0, 0.85, 0.95],
     },
     42: {
         "name": "Sarah Jenkins",
         "role": "Podcaster & Creative Director",
         "avatar": "🎙️",
-        "segment": "Studio & Audio Creator",
-        "status_detail": "Active Profile (12 views, 4 clicks, 1 purchase in Feast)",
-        "affinity_tags": ["Creator", "Mics", "Lighting"]
+        "segment": "Cameras, Lights & Studio Gear",
+        "status_detail": "Active Profile (14 views, 5 clicks, 1 purchase in Feast)",
+        "affinity_tags": ["Creator & Studio", "Audio & Sound"],
+        "primary_cat": "Creator & Studio",
+        "primary_cat_idx": 3,
+        "views": 14, "clicks": 5, "purchases": 1,
+        "feature_vector": [0.15, 0.05, 0.0, 1.0, 0.05, 0.0, 0.70, 0.90],
     },
     89: {
         "name": "Marcus Vance",
-        "role": "Smart Home & Automation Pro",
-        "avatar": "⚡",
-        "segment": "Smart Power & Office Gear",
+        "role": "Workplace Minimalist",
+        "avatar": "💻",
+        "segment": "Displays, Docks & Ergonomics",
         "status_detail": "Frequent Buyer (24 views, 9 clicks, 5 purchases in Feast)",
-        "affinity_tags": ["Smart Home", "Power", "Workspace"]
+        "affinity_tags": ["Computing & Displays", "Keyboards & Peripherals"],
+        "primary_cat": "Computing & Displays",
+        "primary_cat_idx": 1,
+        "views": 24, "clicks": 9, "purchases": 5,
+        "feature_vector": [0.0, 0.75, 0.75, 0.0, 0.10, 0.20, 0.80, 0.90],
     },
     999: {
         "name": "Elena Rostova",
         "role": "First-Time Guest Visitor",
         "avatar": "✨",
-        "segment": "Cold-Start User (No prior interactions)",
+        "segment": "Cold-Start (Popularity Fallback)",
         "status_detail": "Zero Interaction History (Triggering Popularity Fallback)",
-        "affinity_tags": ["Trending", "Best Sellers"]
+        "affinity_tags": ["Trending", "Best Sellers"],
+        "primary_cat": None,
+        "primary_cat_idx": None,
+        "views": 0, "clicks": 0, "purchases": 0,
+        "feature_vector": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
     }
 }
 
@@ -204,5 +264,10 @@ def get_user_persona(user_id: int) -> dict:
         "avatar": "👤",
         "segment": "Standard Customer",
         "status_detail": "Active Customer Profile",
-        "affinity_tags": ["Tech", "Peripherals"]
+        "affinity_tags": ["Tech", "Peripherals"],
+        "primary_cat": "Audio & Sound",
+        "primary_cat_idx": 0,
+        "views": 1, "clicks": 0, "purchases": 0,
+        "feature_vector": [0.5, 0.3, 0.2, 0.0, 0.0, 0.0, 0.5, 0.8],
     }
+

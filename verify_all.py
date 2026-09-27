@@ -56,6 +56,7 @@ def run_tests():
     from vector_db.milvus import search, insert_embeddings
 
     test_vectors = np.random.rand(50, 32).astype(np.float32)
+    test_vectors = test_vectors / np.linalg.norm(test_vectors, axis=1, keepdims=True)
     insert_embeddings(test_vectors)
     query_vec = test_vectors[0]
     hits = search(query_vec, top_k=5)

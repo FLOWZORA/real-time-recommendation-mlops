@@ -12,4 +12,10 @@ numpy
 jsonschema
 pydantic
 pyarrow
-
+sqlalchemy
+psycopg2-binary
+passlib
+bcrypt
+pyjwt
+pytest
+redis
