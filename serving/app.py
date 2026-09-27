@@ -64,6 +64,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Normalize consecutive slashes middleware (e.g. //v1/products -> /v1/products)
+class NormalizePathMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        path = request.scope.get("path", "")
+        if "//" in path:
+            request.scope["path"] = re.sub(r"/+", "/", path)
+        return await call_next(request)
+
+app.add_middleware(NormalizePathMiddleware)
+
 # Startup hook to ensure database is initialized and seeded
 @app.on_event("startup")
 def on_startup():

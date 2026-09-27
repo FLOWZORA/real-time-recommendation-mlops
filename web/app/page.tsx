@@ -234,11 +234,36 @@ export default function StorefrontHome() {
         )}
 
         {/* Product Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {recommendations?.detailed_recommendations?.map((item) => (
-            <ProductCard key={item.item_id} product={item} showScore={true} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="datta-card p-4 bg-white dark:bg-[#2b2c2f] border border-slate-200/80 dark:border-slate-800 animate-pulse space-y-3">
+                <div className="h-44 bg-slate-100 dark:bg-slate-800 rounded-xl"></div>
+                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+                <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-1/2"></div>
+                <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 pt-2"></div>
+              </div>
+            ))}
+          </div>
+        ) : recommendations?.detailed_recommendations?.length ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {recommendations.detailed_recommendations.map((item) => (
+              <ProductCard key={item.item_id} product={item} showScore={true} />
+            ))}
+          </div>
+        ) : (
+          <div className="p-8 text-center bg-white dark:bg-[#2b2c2f] rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              No recommendations returned yet or connecting to ML serving engine.
+            </p>
+            <button
+              onClick={() => loadData(currentUserId, true)}
+              className="px-4 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-[#1dc4e9] to-[#a389d4] text-white shadow-sm hover:opacity-90 transition-all"
+            >
+              Retry Connection
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Catalog Trending Section */}
@@ -261,11 +286,36 @@ export default function StorefrontHome() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {trendingProducts.map((p) => (
-            <ProductCard key={p.id || p.item_id_numeric} product={p} showScore={false} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="datta-card p-4 bg-white dark:bg-[#2b2c2f] border border-slate-200/80 dark:border-slate-800 animate-pulse space-y-3">
+                <div className="h-44 bg-slate-100 dark:bg-slate-800 rounded-xl"></div>
+                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+                <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-1/2"></div>
+                <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3 pt-2"></div>
+              </div>
+            ))}
+          </div>
+        ) : trendingProducts.length ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {trendingProducts.map((p) => (
+              <ProductCard key={p.id || p.item_id_numeric} product={p} showScore={false} />
+            ))}
+          </div>
+        ) : (
+          <div className="p-8 text-center bg-white dark:bg-[#2b2c2f] rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              Unable to reach product catalog at backend.
+            </p>
+            <button
+              onClick={() => loadData(currentUserId, true)}
+              className="px-4 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-[#1dc4e9] to-[#a389d4] text-white shadow-sm hover:opacity-90 transition-all"
+            >
+              Retry Loading Catalog
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );

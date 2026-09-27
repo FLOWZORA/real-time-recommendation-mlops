@@ -1,5 +1,6 @@
 // API client for RecommendationOS backend
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+export const API_BASE_URL = RAW_API_URL.replace(/\/+$/, "");
 
 export interface Product {
   id: string;
@@ -120,7 +121,8 @@ export const TEST_PERSONAS = [
 ];
 
 export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE_URL}${cleanEndpoint}`;
   const rawToken = typeof window !== "undefined" ? localStorage.getItem("reco_token") : null;
   const token = (rawToken && rawToken !== "null" && rawToken !== "undefined" && rawToken.length > 20) ? rawToken : null;
   const headers: Record<string, string> = {
