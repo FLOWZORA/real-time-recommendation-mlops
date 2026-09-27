@@ -14,12 +14,19 @@ def build_ranking_features(user_id: int, item_id: int, ann_score: float = None):
     item_cat = meta.get("category")
     primary_cat = persona.get("primary_cat")
     secondary_cat = persona.get("secondary_cat")
+    affinity_tags = persona.get("affinity_tags") or []
 
-    # Base relevance from category affinity
+    # Base relevance from category affinity:
+    # primary (1.0) > secondary (0.75) > affinity-tag match (0.60) > other (0.25).
+    # The tertiary tier lets personas with broad lifestyles (e.g. Max Sterling:
+    # Workspace + Audio + Smart Home) fill diversity slots with on-theme gear
+    # instead of generic backfill, without disturbing primary rankings.
     if primary_cat and item_cat == primary_cat:
         cat_rel = 1.0
     elif secondary_cat and item_cat == secondary_cat:
         cat_rel = 0.75
+    elif item_cat in affinity_tags:
+        cat_rel = 0.60
     else:
         cat_rel = 0.25
 

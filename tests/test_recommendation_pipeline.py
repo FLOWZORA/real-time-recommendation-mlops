@@ -40,9 +40,12 @@ def test_pipeline_category_diversity():
     cat_counts = {}
     for c in categories:
         cat_counts[c] = cat_counts.get(c, 0) + 1
-    # Ensure no single category occupies more than 4 items (diversity constraint)
+    # Diversity contract mirrors serving/pipeline.py: primary affinity
+    # category up to 6 items (theme depth), all other categories up to 4.
+    # User 0 (Alex Chen) has primary_cat "Audio & Sound".
     for c, count in cat_counts.items():
-        assert count <= 4, f"Category {c} exceeded diversity limit with {count} items"
+        limit = 6 if c == "Audio & Sound" else 4
+        assert count <= limit, f"Category {c} exceeded diversity limit with {count} items"
 
 def test_pipeline_purchased_item_exclusion():
     excluded = [12, 5]

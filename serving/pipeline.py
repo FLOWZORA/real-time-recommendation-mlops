@@ -195,7 +195,9 @@ class RecommendationPipeline:
         1. Duplicate suppression
         2. Purchased item exclusion
         3. Stock availability verification
-        4. Category balance (primary persona category up to 7 items in top-10, complementary items up to 3)
+        4. Category balance (primary persona category up to 6 items in top-10,
+           other categories up to 4) so focused personas (e.g. Max Sterling)
+           see depth in their theme while keeping cross-category discovery.
         """
         seen_ids = set()
         seen_titles = set()
@@ -246,8 +248,9 @@ class RecommendationPipeline:
             if title in seen_titles:
                 continue
 
-            # Category diversity constraint: max 4 items per category
-            max_allowed = 4
+            # Category diversity constraint: primary affinity category allows
+            # up to 6 (theme depth), all other categories up to 4.
+            max_allowed = 6 if (primary_cat and category == primary_cat) else 4
             cat_count = category_counts.get(category, 0)
             if cat_count >= max_allowed:
                 continue
@@ -281,19 +284,58 @@ class RecommendationPipeline:
             if len(enriched_list) >= top_k:
                 break
 
-        # Ensure we always return exactly top_k items by backfilling diverse catalog items
+        # Ensure we always return exactly top_k items by backfilling diverse catalog items.
+        # Persona-aware backfill: for known personas prefer primary, secondary
+        # and affinity-tag categories (by reviews) so leftover slots stay
+        # on-theme (e.g. Max Sterling's smart-home fitness trackers) instead
+        # of generic flagships. Cold-start/guest personas keep the curated
+        # flagship order.
         if len(enriched_list) < top_k:
             from cold_start.popularity import POPULAR_ITEMS
-            for backfill_id in POPULAR_ITEMS:
+            backfill_ids = list(POPULAR_ITEMS)
+            primary_cat = persona.get("primary_cat") if persona else None
+            if primary_cat:
+                secondary_cat = persona.get("secondary_cat") if persona else None
+                affinity_tags = list(persona.get("affinity_tags") or [])
+
+                def _backfill_tier(cat):
+                    if cat == primary_cat:
+                        return 0
+                    if secondary_cat and cat == secondary_cat:
+                        return 1
+                    if cat in affinity_tags:
+                        return 2
+                    return 3
+
+                scored_pool = []
+                for cand_id in range(500):
+                    if cand_id in seen_ids or cand_id in purchased_items:
+                        continue
+                    cand_meta = get_item_metadata(cand_id)
+                    scored_pool.append((
+                        _backfill_tier(cand_meta.get("category")),
+                        -int(cand_meta.get("reviews", 0)),
+                        cand_id,
+                    ))
+                scored_pool.sort()
+                backfill_ids = [cid for _, _, cid in scored_pool] + [
+                    pid for pid in POPULAR_ITEMS
+                    if pid not in seen_ids and pid not in purchased_items
+                ]
+            for backfill_id in backfill_ids:
                 if len(enriched_list) >= top_k:
                     break
                 if backfill_id in seen_ids or backfill_id in purchased_items:
                     continue
                 meta = get_item_metadata(backfill_id)
+                if meta.get("title") in seen_titles:
+                    continue
                 b_cat = meta.get("category", "General")
-                if category_counts.get(b_cat, 0) >= 4:
+                b_max = 6 if (primary_cat and b_cat == primary_cat) else 4
+                if category_counts.get(b_cat, 0) >= b_max:
                     continue
                 seen_ids.add(backfill_id)
+                seen_titles.add(meta.get("title", f"Product {backfill_id}"))
                 category_counts[b_cat] = category_counts.get(b_cat, 0) + 1
                 enriched_list.append({
                     "item_id": backfill_id,
