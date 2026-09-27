@@ -192,37 +192,99 @@ IMAGE_COLLECTION = {
     "smart_mug": [
         "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80",
     ],
+    "ereader": [
+        "https://images.unsplash.com/photo-1592496431122-2349e0fbc666?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+    ],
+    "trackpad": [
+        "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+    ],
+    "wrist_rest": [
+        "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+    ],
+    "organizer_pouch": [
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?auto=format&fit=crop&w=600&q=80",
+    ],
+    "stream_controller": [
+        "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=600&q=80",
+    ],
+    "switcher": [
+        "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=600&q=80",
+    ],
+    "desktop_pc": [
+        "https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=600&q=80",
+    ],
+    "smartwatch": [
+        "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+    ],
+    "running_shoes": [
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80",
+    ],
+    "strength": [
+        "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80",
+    ],
+    "yoga_mat": [
+        "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=600&q=80",
+    ],
+    "bottle_shaker": [
+        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?auto=format&fit=crop&w=600&q=80",
+    ],
     "fitness": [
         "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80",
     ],
 }
 
 PATTERNS = [
     ("herman_miller", re.compile(r"\b(herman miller|aeron)\b", re.I)),
-    ("earbuds", re.compile(r"\b(earbud|earbuds|in-ear|ear \(2\)|airpods pro)\b", re.I)),
+    ("ereader", re.compile(r"\b(kindle|e-reader|ereader|paperwhite)\b", re.I)),
+    ("trackpad", re.compile(r"\b(trackpad|trackpads|magic trackpad)\b", re.I)),
+    ("wrist_rest", re.compile(r"\b(wrist rest|wristrest|carpio)\b", re.I)),
+    ("organizer_pouch", re.compile(r"\b(organizer|tech kit|travel kit|pouch)\b", re.I)),
+    ("stream_controller", re.compile(r"\b(stream deck|lcd keys|studio controller)\b", re.I)),
+    ("switcher", re.compile(r"\b(atem|switcher|live streaming switcher)\b", re.I)),
+    ("desktop_pc", re.compile(r"\b(mac studio|mac mini|desktop pc|mini pc)\b", re.I)),
+    ("smartwatch", re.compile(r"\b(smartwatch|smart watch|forerunner|apple watch|watch ultra|gps watch|fitness tracker|fitbit|garmin|amazfit)\b", re.I)),
+    ("running_shoes", re.compile(r"\b(running shoe|running shoes|sneaker|sneakers|trail runner|pegasus|ultraboost|vaporfly|Clifton|Speedgoat)\b", re.I)),
+    ("strength", re.compile(r"\b(dumbbell|dumbbells|kettlebell|barbell|weight|weights|strength|power rack|squat rack|bench press)\b", re.I)),
+    ("yoga_mat", re.compile(r"\b(yoga mat|yoga|pilates|foam roller|mobility)\b", re.I)),
+    ("bottle_shaker", re.compile(r"\b(shaker|protein shaker|water bottle|insulated bottle|hydration bottle|sport bottle)\b", re.I)),
+    ("earbuds", re.compile(r"\b(earbud|earbuds|in-ear|ear \(2\)|airpods pro|soundsport|sport earbuds)\b", re.I)),
     ("headphones_overear", re.compile(r"\b(headphone|headphones|headset|headsets|wh-1000xm|airpods max|bathys|ath-m50x|aonic|hd 660s2|dac)\b", re.I)),
     ("speaker", re.compile(r"\b(speaker|speakers|stanmore|era 300|soundcore|homepod)\b", re.I)),
     ("microphone", re.compile(r"\b(mic|mics|microphone|microphones|sm7b|wave:3|lark|rodecaster|boom arm)\b", re.I)),
-    ("camera", re.compile(r"\b(camera|cameras|mirrorless|dslr|alpha 7|atem|switcher|stream deck)\b", re.I)),
-    ("backpack", re.compile(r"\b(backpack|bag|bags|organizer|tech kit)\b", re.I)),
+    ("camera", re.compile(r"\b(camera|cameras|mirrorless|dslr|alpha 7)\b", re.I)),
+    ("backpack", re.compile(r"\b(backpack|backpacks|duffel|gym bag|everyday backpack)\b", re.I)),
     ("lighting", re.compile(r"\b(screenbar|light|lights|lightstrip|lightstrips|lamp|lamps|nanoleaf|hue)\b", re.I)),
-    ("desk_mat", re.compile(r"\b(desk mat|wrist rest|carpio|desk pad)\b", re.I)),
+    ("desk_mat", re.compile(r"\b(desk mat|desk pad)\b", re.I)),
     ("wood_stand", re.compile(r"\b(monitor stand|desk shelf|riser|wood stand)\b", re.I)),
     ("display", re.compile(r"\b(monitor|monitors|display|displays|ultrasharp|ultrawide|proart|odyssey)\b", re.I)),
     ("dock_hub", re.compile(r"\b(dock|docks|docking|hub|hubs|adapter|adapters)\b", re.I)),
-    ("power_bank", re.compile(r"\b(power bank|powercore|battery|kindle|portable charger)\b", re.I)),
+    ("power_bank", re.compile(r"\b(power bank|powercore|battery|portable charger)\b", re.I)),
     ("charger", re.compile(r"\b(charger|chargers|charging|gan|magsafe|magnetic wireless|plug|power meter)\b", re.I)),
     ("standing_desk", re.compile(r"\b(standing desk|uplift)\b", re.I)),
-    ("fitness", re.compile(r"\b(fitness|workout|gym|athletic|smartwatch|band|shaker|running)\b", re.I)),
+    ("fitness", re.compile(r"\b(fitness|workout|gym|athletic|recovery|massage gun|jump rope|resistance band|athleisure|training)\b", re.I)),
     ("chair", re.compile(r"\b(chair|chairs|steelcase|seating)\b", re.I)),
     ("coffee_maker", re.compile(r"\b(coffee|grinder|kettle|aeropress|pour-over|brew)\b", re.I)),
     ("smart_mug", re.compile(r"\b(mug|mugs|tumbler|tumblers|cup|kinto|yeti|ember)\b", re.I)),
     ("keyboard", re.compile(r"\b(keyboard|keyboards|keychron|nuphy|hhkb|wooting|mechanical)\b", re.I)),
-    ("mouse", re.compile(r"\b(mouse|mice|trackpad|trackpads|deathadder|mx master)\b", re.I)),
-    ("laptop", re.compile(r"\b(macbook|laptop|laptops|thinkpad|ultrabook|mac studio|notebook)\b", re.I)),
+    ("mouse", re.compile(r"\b(mouse|mice|deathadder|mx master)\b", re.I)),
+    ("laptop", re.compile(r"\b(macbook|laptop|laptops|thinkpad|ultrabook|notebook)\b", re.I)),
 ]
 
 def get_product_image(item_id: int, title: str, category: str) -> str:
@@ -251,10 +313,45 @@ def get_product_image(item_id: int, title: str, category: str) -> str:
 # Cache catalog
 CATALOG = {}
 
+# Curated fitness & athletic performance lineup for Max Sterling (persona 55).
+# IDs 480-499 override procedural filler so Max has high-affinity matches
+# while keeping all 6 category vectors / 8-dim model unchanged.
+# Categories reuse the existing 6 so Two-Tower embeddings stay compatible.
+MAX_STERLING_FITNESS_PRODUCTS = [
+    {"title": "Garmin Forerunner 965 GPS Running Smartwatch with AMOLED Display", "category": "Workspace & Lifestyle", "price": 599.99, "rating": 4.8, "reviews": 3240, "badge": "Athlete Pick", "description": "Multisport GPS running smartwatch with wrist-based heart rate, training readiness and AMOLED display for serious runners."},
+    {"title": "Apple Watch Ultra 2 Trail Loop GPS Fitness Tracker - Titanium", "category": "Workspace & Lifestyle", "price": 799.00, "rating": 4.9, "reviews": 5120, "badge": "Premium", "description": "Rugged titanium fitness tracker smartwatch with dual-frequency GPS, trail loop band and 36-hour battery for outdoor athletes."},
+    {"title": "Bose SoundSport Wireless Fitness Earbuds with Heart-Rate Monitoring", "category": "Audio & Sound", "price": 199.00, "rating": 4.7, "reviews": 6840, "badge": "Workout Ready", "description": "Sweat-resistant wireless fitness earbuds with secure sport fit, heart-rate monitoring and punchy bass for training sessions."},
+    {"title": "Jabra Elite 8 Active Workout Earbuds - ShakeGrip Sport Fit", "category": "Audio & Sound", "price": 179.99, "rating": 4.6, "reviews": 2930, "badge": "Sport Fit", "description": "Durable workout earbuds with ShakeGrip coating, adaptive noise cancellation and military-grade durability for gym training."},
+    {"title": "Nike Pegasus Trail Running Shoes - Responsive Athletic Footwear", "category": "Workspace & Lifestyle", "price": 149.95, "rating": 4.8, "reviews": 8210, "badge": "Runner Favorite", "description": "Responsive trail running shoes with React foam cushioning and grippy outsole for road-to-trail athletic performance."},
+    {"title": "Adidas Ultraboost Light Running Sneakers for Daily Training", "category": "Workspace & Lifestyle", "price": 189.99, "rating": 4.7, "reviews": 6450, "badge": "Best Seller", "description": "Lightweight daily training running sneakers with Boost midsole energy return for runners and gym athletes."},
+    {"title": "Bowflex SelectTech Adjustable Dumbbell Pair - Strength Training", "category": "Workspace & Lifestyle", "price": 379.00, "rating": 4.9, "reviews": 11200, "badge": "Strength Pick", "description": "Space-saving adjustable dumbbell pair replacing 15 weight sets, ideal for home gym strength training and progressive overload."},
+    {"title": "Kettlebell Kings Powder-Coat Kettlebell for Strength Workouts", "category": "Workspace & Lifestyle", "price": 89.00, "rating": 4.8, "reviews": 4310, "badge": "Gym Essential", "description": "Single-piece cast-iron kettlebell with powder-coat grip for swings, snatches and full-body strength workouts."},
+    {"title": "Manduka PRO Yoga Mat 6mm - Extra Thick Athletic Recovery Mat", "category": "Workspace & Lifestyle", "price": 128.00, "rating": 4.8, "reviews": 5670, "badge": "Yoga Pro", "description": "Ultra-dense 6mm yoga mat with superior joint protection and grip for stretching, mobility and athletic recovery."},
+    {"title": "TriggerPoint GRID Foam Roller for Mobility and Muscle Recovery", "category": "Workspace & Lifestyle", "price": 34.99, "rating": 4.8, "reviews": 18900, "badge": "Recovery", "description": "Multi-density foam roller for deep-tissue mobility work, post-workout muscle recovery and flexibility training."},
+    {"title": "Hydro Flask Wide Mouth Insulated Sport Water Bottle 32 oz", "category": "Workspace & Lifestyle", "price": 44.95, "rating": 4.9, "reviews": 22400, "badge": "Hydration", "description": "Double-wall vacuum insulated sport water bottle keeping drinks cold for 24 hours through workouts and trail runs."},
+    {"title": "BlenderBottle Classic Protein Shaker with Wire Whisk 28 oz", "category": "Workspace & Lifestyle", "price": 12.99, "rating": 4.8, "reviews": 31200, "badge": "Gym Staple", "description": "Leak-proof protein shaker with stainless whisk ball for smooth shakes, pre-workout and post-training nutrition."},
+    {"title": "Theragun Mini Massage Gun for Athletic Recovery", "category": "Workspace & Lifestyle", "price": 199.00, "rating": 4.7, "reviews": 7860, "badge": "Recovery Pro", "description": "Compact percussive massage gun with 3 speeds for on-the-go athletic recovery, warm-up and soreness relief."},
+    {"title": "Fitbit Charge 6 Fitness Tracker with Heart Rate and GPS", "category": "Workspace & Lifestyle", "price": 159.95, "rating": 4.6, "reviews": 9410, "badge": "Tracker", "description": "Slim fitness tracker with continuous heart rate, built-in GPS and 7-day battery for all-day activity and sleep tracking."},
+    {"title": "Withings Body Smart Fitness Scale with App Sync and Coaching", "category": "Workspace & Lifestyle", "price": 99.95, "rating": 4.7, "reviews": 5120, "badge": "Smart Health", "description": "Wi-Fi connected smart fitness scale measuring weight, body composition and heart health with automatic app sync."},
+    {"title": "Under Armour Athletic Training Duffel Gym Bag 40L", "category": "Workspace & Lifestyle", "price": 65.00, "rating": 4.7, "reviews": 3890, "badge": "Gym Bag", "description": "Durable 40L athletic training duffel gym bag with ventilated shoe pocket and water-resistant finish for daily workouts."},
+    {"title": "Sony Float Run Wireless Workout Headphones - Off-Ear Sport Fit", "category": "Audio & Sound", "price": 129.99, "rating": 4.6, "reviews": 2140, "badge": "Run Ready", "description": "Off-ear wireless workout headphones that stay stable while running, with ambient awareness for safe outdoor training."},
+    {"title": "Beats Powerbeats Pro Athletic Earbuds with Ear Hooks", "category": "Audio & Sound", "price": 249.99, "rating": 4.7, "reviews": 15300, "badge": "Athletic", "description": "Secure-fit athletic earbuds with adjustable ear hooks, sweat resistance and 9-hour battery for intense gym sessions."},
+    {"title": "Gaiam Athletic Resistance Band Set - 3 Levels for Strength Training", "category": "Workspace & Lifestyle", "price": 24.98, "rating": 4.6, "reviews": 9780, "badge": "Training", "description": "Set of 3 athletic resistance bands for strength training, physical therapy, warm-ups and full-body home workouts."},
+    {"title": "Nike Dri-FIT Athletic Training Jump Rope with Weighted Handles", "category": "Workspace & Lifestyle", "price": 29.99, "rating": 4.5, "reviews": 3420, "badge": "Cardio", "description": "Adjustable athletic jump rope with weighted handles and smooth bearings for cardio conditioning and boxing training."},
+]
+
 def _init_catalog():
     global CATALOG
     for i in range(500):
-        if i < len(REAL_PRODUCTS_SEED):
+        # Max Sterling fitness lineup occupies the tail (480-499) so the
+        # 0-59 flagship seeds and low-ID embeddings stay stable.
+        if 480 <= i < 480 + len(MAX_STERLING_FITNESS_PRODUCTS):
+            item = dict(MAX_STERLING_FITNESS_PRODUCTS[i - 480])
+            item["item_id"] = i
+            item["name"] = item["title"]
+            item["image_url"] = get_product_image(i, item["title"], item["category"])
+            CATALOG[i] = item
+        elif i < len(REAL_PRODUCTS_SEED):
             item = dict(REAL_PRODUCTS_SEED[i])
             item["item_id"] = i
             item["name"] = item["title"]
@@ -436,6 +533,7 @@ USER_PERSONAS = {
         "affinity_tags": ["Workspace & Lifestyle", "Audio & Sound", "Smart Home & Power"],
         "primary_cat": "Workspace & Lifestyle",
         "primary_cat_idx": 5,
+        "secondary_cat": "Audio & Sound",
         "views": 26, "clicks": 10, "purchases": 4,
         "feature_vector": [0.35, 0.0, 0.0, 0.0, 0.20, 0.85, 0.65, 0.95],
     },

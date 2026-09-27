@@ -105,7 +105,7 @@ def init_db():
                         item_id_numeric=item_idx,
                         category_id=cat_id,
                         title=meta.get("title", f"Product {item_idx}"),
-                        description=f"High-performance {meta.get('category', 'Hardware')} designed for modern workflows.",
+                        description=meta.get("description") or f"High-performance {meta.get('category', 'Hardware')} designed for modern workflows.",
                         price=float(meta.get("price", 99.99)),
                         rating=float(meta.get("rating", 4.8)),
                         reviews_count=int(meta.get("reviews", 100)),
@@ -118,14 +118,43 @@ def init_db():
             db.flush()
             print(f"[OK] Seeded 500 catalog items into PostgreSQL/SQLite database.")
 
-        # Sync existing products with latest catalog photography
+        # Sync existing products with latest catalog titles, categories,
+        # descriptions and photography (picks up Max Sterling fitness lineup
+        # 480-499 and image-mismatch fixes without requiring a DB wipe).
         all_products = db.query(Product).filter(Product.organization_id == org.id).all()
         updated_count = 0
         for p in all_products:
             meta = get_item_metadata(p.item_id_numeric)
             desired_img = meta.get("image_url")
+            desired_title = meta.get("title")
+            desired_cat_id = category_map.get(meta.get("category"))
+            desired_desc = meta.get("description") or f"High-performance {meta.get('category', 'Hardware')} designed for modern workflows."
+            changed = False
             if desired_img and p.image_url != desired_img:
                 p.image_url = desired_img
+                changed = True
+            if desired_title and p.title != desired_title:
+                p.title = desired_title
+                changed = True
+            if desired_cat_id and p.category_id != desired_cat_id:
+                p.category_id = desired_cat_id
+                changed = True
+            if desired_desc and p.description != desired_desc:
+                p.description = desired_desc
+                changed = True
+            if meta.get("price") is not None and float(p.price or 0) != float(meta["price"]):
+                p.price = float(meta["price"])
+                changed = True
+            if meta.get("rating") is not None and float(p.rating or 0) != float(meta["rating"]):
+                p.rating = float(meta["rating"])
+                changed = True
+            if meta.get("reviews") is not None and int(p.reviews_count or 0) != int(meta["reviews"]):
+                p.reviews_count = int(meta["reviews"])
+                changed = True
+            if meta.get("badge") and p.badge != meta["badge"]:
+                p.badge = meta["badge"]
+                changed = True
+            if changed:
                 updated_count += 1
         if updated_count > 0:
             db.flush()

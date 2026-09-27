@@ -1,6 +1,7 @@
 /**
- * Tech hardware product photography matcher.
- * Maps product title keywords and categories to verified high-resolution tech gear photos.
+ * Tech hardware + fitness product photography matcher.
+ * Maps product title keywords and categories to verified high-resolution photos.
+ * Mirrors features/catalog_data.py so frontend fallbacks match backend catalog.
  */
 
 const FALLBACK_COLLECTIONS: Record<string, string[]> = {
@@ -74,11 +75,61 @@ const FALLBACK_COLLECTIONS: Record<string, string[]> = {
   smart_mug: [
     "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80",
   ],
+  ereader: [
+    "https://images.unsplash.com/photo-1592496431122-2349e0fbc666?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+  ],
+  trackpad: [
+    "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+  ],
+  wrist_rest: [
+    "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+  ],
+  organizer_pouch: [
+    "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?auto=format&fit=crop&w=600&q=80",
+  ],
+  stream_controller: [
+    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=600&q=80",
+  ],
+  switcher: [
+    "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=600&q=80",
+  ],
+  desktop_pc: [
+    "https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=600&q=80",
+  ],
+  smartwatch: [
+    "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+  ],
+  running_shoes: [
+    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80",
+  ],
+  strength: [
+    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80",
+  ],
+  yoga_mat: [
+    "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=600&q=80",
+  ],
+  bottle_shaker: [
+    "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?auto=format&fit=crop&w=600&q=80",
+  ],
   fitness: [
     "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=600&q=80",
     "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=600&q=80",
     "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80",
   ],
   keyboard: [
     "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
@@ -98,27 +149,39 @@ const FALLBACK_COLLECTIONS: Record<string, string[]> = {
 
 const PATTERNS: [string, RegExp][] = [
   ["herman_miller", /\b(herman miller|aeron)\b/i],
-  ["earbuds", /\b(earbud|earbuds|in-ear|ear \(2\)|airpods pro)\b/i],
+  ["ereader", /\b(kindle|e-reader|ereader|paperwhite)\b/i],
+  ["trackpad", /\b(trackpad|trackpads|magic trackpad)\b/i],
+  ["wrist_rest", /\b(wrist rest|wristrest|carpio)\b/i],
+  ["organizer_pouch", /\b(organizer|tech kit|travel kit|pouch)\b/i],
+  ["stream_controller", /\b(stream deck|lcd keys|studio controller)\b/i],
+  ["switcher", /\b(atem|switcher|live streaming switcher)\b/i],
+  ["desktop_pc", /\b(mac studio|mac mini|desktop pc|mini pc)\b/i],
+  ["smartwatch", /\b(smartwatch|smart watch|forerunner|apple watch|watch ultra|gps watch|fitness tracker|fitbit|garmin|amazfit)\b/i],
+  ["running_shoes", /\b(running shoe|running shoes|sneaker|sneakers|trail runner|pegasus|ultraboost|vaporfly|Clifton|Speedgoat)\b/i],
+  ["strength", /\b(dumbbell|dumbbells|kettlebell|barbell|weight|weights|strength|power rack|squat rack|bench press)\b/i],
+  ["yoga_mat", /\b(yoga mat|yoga|pilates|foam roller|mobility)\b/i],
+  ["bottle_shaker", /\b(shaker|protein shaker|water bottle|insulated bottle|hydration bottle|sport bottle)\b/i],
+  ["earbuds", /\b(earbud|earbuds|in-ear|ear \(2\)|airpods pro|soundsport|sport earbuds)\b/i],
   ["headphones_overear", /\b(headphone|headphones|headset|headsets|wh-1000xm|airpods max|bathys|ath-m50x|aonic|hd 660s2|dac)\b/i],
   ["speaker", /\b(speaker|speakers|stanmore|era 300|soundcore|homepod)\b/i],
   ["microphone", /\b(mic|mics|microphone|microphones|sm7b|wave:3|lark|rodecaster|boom arm)\b/i],
-  ["camera", /\b(camera|cameras|mirrorless|dslr|alpha 7|atem|switcher|stream deck)\b/i],
-  ["backpack", /\b(backpack|bag|bags|organizer|tech kit)\b/i],
+  ["camera", /\b(camera|cameras|mirrorless|dslr|alpha 7)\b/i],
+  ["backpack", /\b(backpack|backpacks|duffel|gym bag|everyday backpack)\b/i],
   ["lighting", /\b(screenbar|light|lights|lightstrip|lightstrips|lamp|lamps|nanoleaf|hue)\b/i],
-  ["desk_mat", /\b(desk mat|wrist rest|carpio|desk pad)\b/i],
+  ["desk_mat", /\b(desk mat|desk pad)\b/i],
   ["wood_stand", /\b(monitor stand|desk shelf|riser|wood stand)\b/i],
   ["display", /\b(monitor|monitors|display|displays|ultrasharp|ultrawide|proart|odyssey)\b/i],
   ["dock_hub", /\b(dock|docks|docking|hub|hubs|adapter|adapters)\b/i],
-  ["power_bank", /\b(power bank|powercore|battery|kindle|portable charger)\b/i],
+  ["power_bank", /\b(power bank|powercore|battery|portable charger)\b/i],
   ["charger", /\b(charger|chargers|charging|gan|magsafe|magnetic wireless|plug|power meter)\b/i],
   ["standing_desk", /\b(standing desk|uplift)\b/i],
-  ["fitness", /\b(fitness|workout|gym|athletic|smartwatch|band|shaker|running)\b/i],
+  ["fitness", /\b(fitness|workout|gym|athletic|recovery|massage gun|jump rope|resistance band|athleisure|training)\b/i],
   ["chair", /\b(chair|chairs|steelcase|seating)\b/i],
   ["coffee_maker", /\b(coffee|grinder|kettle|aeropress|pour-over|brew)\b/i],
   ["smart_mug", /\b(mug|mugs|tumbler|tumblers|cup|kinto|yeti|ember)\b/i],
   ["keyboard", /\b(keyboard|keyboards|keychron|nuphy|hhkb|wooting|mechanical)\b/i],
-  ["mouse", /\b(mouse|mice|trackpad|trackpads|deathadder|mx master)\b/i],
-  ["laptop", /\b(macbook|laptop|laptops|thinkpad|ultrabook|mac studio|notebook)\b/i],
+  ["mouse", /\b(mouse|mice|deathadder|mx master)\b/i],
+  ["laptop", /\b(macbook|laptop|laptops|thinkpad|ultrabook|notebook)\b/i],
 ];
 
 export function getProductImageUrl(
