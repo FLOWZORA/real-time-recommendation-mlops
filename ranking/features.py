@@ -34,8 +34,10 @@ def build_ranking_features(user_id: int, item_id: int, ann_score: float = None):
     popularity = min(rating / 5.0, 1.0)
     recency = min(reviews / 10000.0, 1.0)
 
-    # Flagship bonus for items 0..59 (seed catalog items)
-    if item_id < 60:
+    # Flagship bonus for hand-curated seeds (0-59) and the
+    # Max Sterling fitness lineup (480-499) so new athletic gear
+    # competes on equal footing instead of losing to coffee flagships.
+    if item_id < 60 or 480 <= item_id < 500:
         relevance_score = min(1.0, relevance_score + 0.15)
         popularity = min(1.0, popularity + 0.1)
 

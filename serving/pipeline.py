@@ -120,8 +120,11 @@ class RecommendationPipeline:
             with torch.no_grad():
                 user_embedding = model.user(user_features).numpy()
 
-            # Retrieve top 50 candidates from ANN Milvus / Local Vector Store
-            retrieved_ids = search(user_embedding, top_k=50)
+            # Retrieve top candidates from ANN Milvus / Local Vector Store.
+            # Depth 150 (still sub-ms over 500 items) ensures niche affinity
+            # lineups (e.g. Max Sterling audio fitness earbuds, ranks ~110-130)
+            # enter ranking instead of being cut off at 50.
+            retrieved_ids = search(user_embedding, top_k=150)
         except Exception as e:
             # Fallback Tier 3: Category / Trending Fallback on vector store failure
             print(f"[WARN] Retrieval failed ({e}), using trending fallback")
@@ -139,7 +142,9 @@ class RecommendationPipeline:
         ranked = rank_items(scored_candidates)
 
         # 5. STAGE 3: Re-ranking & Business Constraints (Stock, Diversity, Deduplication)
-        top_candidates = [cand["item_id"] for cand in ranked[:40]]
+        # Slice 150 (not 40) so secondary-category affinity items survive
+        # diversity caps instead of triggering generic backfill.
+        top_candidates = [cand["item_id"] for cand in ranked[:150]]
         detailed_items = self._re_rank_and_enrich(
             top_candidates,
             purchased_items,
