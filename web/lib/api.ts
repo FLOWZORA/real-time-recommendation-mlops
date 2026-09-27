@@ -115,8 +115,11 @@ export interface ApiKeyItem {
 // User personas for live simulation
 export const TEST_PERSONAS = [
   { id: "0", name: "Alex Chen", role: "Audiophile & Music Producer", segment: "Audio & Hi-Fi Gear", avatar: "🎧" },
+  { id: "12", name: "Devon Brooks", role: "Mechanical Keyboard Modder", segment: "Custom Keyboards & Desk Gear", avatar: "⌨️" },
+  { id: "15", name: "Liam Thorne", role: "Smart Home & Power Architect", segment: "GaN Fast Chargers & Smart IoT", avatar: "⚡" },
   { id: "42", name: "Sarah Jenkins", role: "Tech Creator & Streamer", segment: "Cameras, Lights & Studio Gear", avatar: "🎙️" },
-  { id: "89", name: "Marcus Vance", role: "Workplace Minimalist", segment: "Displays, Docks & Ergonomics", avatar: "💻" },
+  { id: "64", name: "Chloe Rivera", role: "Ergonomics & Interior Architect", segment: "Premium Ergonomics & Lifestyle", avatar: "🪴" },
+  { id: "89", name: "Marcus Vance", role: "Workplace Minimalist", segment: "Displays, Docks & Ultrabooks", avatar: "💻" },
   { id: "999", name: "Elena Rostova", role: "New Visitor", segment: "Cold-Start (Popularity Fallback)", avatar: "✨" },
 ];
 
