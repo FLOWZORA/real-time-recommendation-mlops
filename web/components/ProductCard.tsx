@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Star, ShoppingCart, Heart, Check, Sparkles } from "lucide-react";
 import { sendEvent, Product, RecommendationItem } from "@/lib/api";
+import { getProductImageUrl } from "@/lib/productImage";
 
 interface ProductCardProps {
   product: Product | RecommendationItem;
@@ -16,6 +17,12 @@ export default function ProductCard({ product, showScore = false }: ProductCardP
 
   const itemId = "item_id_numeric" in product ? product.item_id_numeric : product.item_id;
   const currentUserId = typeof window !== "undefined" ? localStorage.getItem("current_user_id") || "0" : "0";
+  const finalImage = getProductImageUrl(
+    product.image_url,
+    product.title,
+    "category" in product ? (product as any).category : undefined,
+    itemId
+  );
 
   const handleCardClick = () => {
     sendEvent(currentUserId, itemId, "product_click").catch(() => {});
@@ -32,7 +39,7 @@ export default function ProductCard({ product, showScore = false }: ProductCardP
       item_id: itemId,
       title: product.title,
       price: product.price,
-      image_url: product.image_url,
+      image_url: finalImage,
     });
     localStorage.setItem("reco_cart", JSON.stringify(currentCart));
     window.dispatchEvent(new Event("cart_updated"));
@@ -78,17 +85,12 @@ export default function ProductCard({ product, showScore = false }: ProductCardP
 
       {/* Image Container */}
       <Link href={`/products/${itemId}`} className="block relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800/40 p-6 flex items-center justify-center">
-        {product.image_url ? (
-          <img
-            src={product.image_url}
-            alt={product.title}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
-          <div className="w-24 h-24 rounded-2xl bg-gradient-to-tr from-cyan-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-cyan-600 dark:text-cyan-400 font-black text-2xl">
-            #{itemId}
-          </div>
-        )}
+        <img
+          src={finalImage}
+          alt={product.title}
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
       </Link>
 
       {/* Content */}

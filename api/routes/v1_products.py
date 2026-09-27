@@ -7,6 +7,7 @@ from api.database import get_db
 from api.models.product import Product, Category
 from api.schemas.product import ProductCreate, ProductUpdate, ProductResponse, CategoryResponse
 from api.security.permissions import get_auth_context, require_role, AuthContext
+from features.catalog_data import get_product_image
 
 router = APIRouter(prefix="/v1/products", tags=["Products"])
 
@@ -98,7 +99,7 @@ def create_product(
         price=req.price,
         rating=req.rating or 5.0,
         badge=req.badge,
-        image_url=req.image_url or f"https://picsum.photos/seed/{item_num}/400/300",
+        image_url=req.image_url or get_product_image(item_num, req.title, ""),
         in_stock=req.in_stock if req.in_stock is not None else True,
         popularity_score=0,
     )

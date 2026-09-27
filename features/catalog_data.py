@@ -105,6 +105,136 @@ ITEM_TYPES_BY_CAT = {
     "Workspace & Lifestyle": ["Precision Coffee Grinder", "Smart Temperature Mug", "Ergonomic Office Chair", "Electric Gooseneck Kettle", "Solid Wood Stand", "Cable Organizer"]
 }
 
+import re
+
+IMAGE_COLLECTION = {
+    "headphones_overear": [
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=600&q=80",
+    ],
+    "earbuds": [
+        "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?auto=format&fit=crop&w=600&q=80",
+    ],
+    "speaker": [
+        "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80",
+    ],
+    "laptop": [
+        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=600&q=80",
+    ],
+    "display": [
+        "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1586210579191-33b45e38fa2c?auto=format&fit=crop&w=600&q=80",
+    ],
+    "dock_hub": [
+        "https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=600&q=80",
+    ],
+    "keyboard": [
+        "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=600&q=80",
+    ],
+    "mouse": [
+        "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80",
+    ],
+    "desk_mat": [
+        "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=600&q=80",
+    ],
+    "wood_stand": [
+        "https://images.unsplash.com/photo-1593062096033-9a26b09da705?auto=format&fit=crop&w=600&q=80",
+    ],
+    "microphone": [
+        "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=600&q=80",
+    ],
+    "camera": [
+        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80",
+    ],
+    "backpack": [
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+    ],
+    "lighting": [
+        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80",
+    ],
+    "power_bank": [
+        "https://images.unsplash.com/photo-1621259182978-fbf93132d53d?auto=format&fit=crop&w=600&q=80",
+    ],
+    "charger": [
+        "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80",
+    ],
+    "chair": [
+        "https://images.unsplash.com/photo-1589384267710-7a170981ca78?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=600&q=80",
+    ],
+    "standing_desk": [
+        "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80",
+    ],
+    "coffee_maker": [
+        "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
+    ],
+    "smart_mug": [
+        "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80",
+    ],
+}
+
+PATTERNS = [
+    ("earbuds", re.compile(r"\b(earbud|earbuds|in-ear|ear \(2\)|airpods pro)\b", re.I)),
+    ("headphones_overear", re.compile(r"\b(headphone|headphones|headset|headsets|wh-1000xm|airpods max|bathys|ath-m50x|aonic|hd 660s2|dac)\b", re.I)),
+    ("speaker", re.compile(r"\b(speaker|speakers|stanmore|era 300|soundcore|homepod)\b", re.I)),
+    ("microphone", re.compile(r"\b(mic|mics|microphone|microphones|sm7b|wave:3|lark|rodecaster|boom arm)\b", re.I)),
+    ("camera", re.compile(r"\b(camera|cameras|mirrorless|dslr|alpha 7|atem|switcher|stream deck)\b", re.I)),
+    ("backpack", re.compile(r"\b(backpack|bag|bags|organizer|tech kit)\b", re.I)),
+    ("lighting", re.compile(r"\b(screenbar|light|lights|lightstrip|lightstrips|lamp|lamps|nanoleaf|hue)\b", re.I)),
+    ("desk_mat", re.compile(r"\b(desk mat|wrist rest|carpio|desk pad)\b", re.I)),
+    ("wood_stand", re.compile(r"\b(monitor stand|desk shelf|riser|wood stand)\b", re.I)),
+    ("display", re.compile(r"\b(monitor|monitors|display|displays|ultrasharp|ultrawide|proart|odyssey)\b", re.I)),
+    ("dock_hub", re.compile(r"\b(dock|docks|docking|hub|hubs|adapter|adapters)\b", re.I)),
+    ("power_bank", re.compile(r"\b(power bank|powercore|battery|kindle)\b", re.I)),
+    ("charger", re.compile(r"\b(charger|chargers|charging|gan|magsafe|magnetic wireless|plug|power meter)\b", re.I)),
+    ("standing_desk", re.compile(r"\b(standing desk|uplift)\b", re.I)),
+    ("chair", re.compile(r"\b(chair|chairs|aeron|steelcase|seating)\b", re.I)),
+    ("coffee_maker", re.compile(r"\b(coffee|grinder|kettle|aeropress|pour-over|brew)\b", re.I)),
+    ("smart_mug", re.compile(r"\b(mug|mugs|tumbler|tumblers|cup|kinto|yeti|ember)\b", re.I)),
+    ("keyboard", re.compile(r"\b(keyboard|keyboards|keychron|nuphy|hhkb|wooting|mechanical)\b", re.I)),
+    ("mouse", re.compile(r"\b(mouse|mice|trackpad|trackpads|deathadder|mx master)\b", re.I)),
+    ("laptop", re.compile(r"\b(macbook|laptop|laptops|thinkpad|ultrabook|mac studio|notebook)\b", re.I)),
+]
+
+def get_product_image(item_id: int, title: str, category: str) -> str:
+    """Return high-resolution, matching tech product photography based on product title and category."""
+    for pool_name, pattern in PATTERNS:
+        if pattern.search(title):
+            pool = IMAGE_COLLECTION[pool_name]
+            return pool[item_id % len(pool)]
+
+    cat_lower = category.lower()
+    if "audio" in cat_lower:
+        pool = IMAGE_COLLECTION["headphones_overear"] + IMAGE_COLLECTION["earbuds"]
+    elif "display" in cat_lower or "computing" in cat_lower:
+        pool = IMAGE_COLLECTION["display"] + IMAGE_COLLECTION["laptop"]
+    elif "keyboard" in cat_lower or "peripheral" in cat_lower:
+        pool = IMAGE_COLLECTION["keyboard"] + IMAGE_COLLECTION["mouse"]
+    elif "creator" in cat_lower or "studio" in cat_lower:
+        pool = IMAGE_COLLECTION["microphone"] + IMAGE_COLLECTION["camera"]
+    elif "power" in cat_lower or "smart" in cat_lower:
+        pool = IMAGE_COLLECTION["charger"] + IMAGE_COLLECTION["power_bank"]
+    else:
+        pool = IMAGE_COLLECTION["chair"] + IMAGE_COLLECTION["standing_desk"] + IMAGE_COLLECTION["coffee_maker"]
+
+    return pool[item_id % len(pool)]
+
 # Cache catalog
 CATALOG = {}
 
@@ -115,6 +245,7 @@ def _init_catalog():
             item = dict(REAL_PRODUCTS_SEED[i])
             item["item_id"] = i
             item["name"] = item["title"]
+            item["image_url"] = get_product_image(i, item["title"], item["category"])
             CATALOG[i] = item
         else:
             cat_dict = CATEGORIES[i % len(CATEGORIES)]
@@ -127,16 +258,18 @@ def _init_catalog():
             reviews = 300 + ((i * 137) % 9500)
             badges = ["Trending", "Staff Pick", "Best Seller", "New", "Top Rated"]
             badge = badges[i % len(badges)]
+            item_title = f"{brand} {itype} ({version})"
 
             CATALOG[i] = {
                 "item_id": i,
-                "title": f"{brand} {itype} ({version})",
-                "name": f"{brand} {itype} ({version})",
+                "title": item_title,
+                "name": item_title,
                 "category": cat_name,
                 "price": price,
                 "rating": rating,
                 "reviews": reviews,
-                "badge": badge
+                "badge": badge,
+                "image_url": get_product_image(i, item_title, cat_name),
             }
 
 _init_catalog()
@@ -147,16 +280,21 @@ def get_item_metadata(item_id: int) -> dict:
         item = CATALOG[item_id]
         if "name" not in item:
             item["name"] = item.get("title", f"Product #{item_id}")
+        if "image_url" not in item:
+            item["image_url"] = get_product_image(item_id, item.get("title", ""), item.get("category", ""))
         return item
+    title = f"Workspace Tech Gear #{item_id}"
+    cat = "Keyboards & Peripherals"
     return {
         "item_id": item_id,
-        "title": f"Workspace Tech Gear #{item_id}",
-        "name": f"Workspace Tech Gear #{item_id}",
-        "category": "Keyboards & Peripherals",
+        "title": title,
+        "name": title,
+        "category": cat,
         "price": 99.99,
         "rating": 4.7,
         "reviews": 1200,
-        "badge": "Popular"
+        "badge": "Popular",
+        "image_url": get_product_image(item_id, title, cat),
     }
 
 CAT_NAME_TO_INDEX = {

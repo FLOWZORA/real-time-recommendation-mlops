@@ -110,13 +110,26 @@ def init_db():
                         rating=float(meta.get("rating", 4.8)),
                         reviews_count=int(meta.get("reviews", 100)),
                         badge=meta.get("badge", "Popular"),
-                        image_url=f"https://picsum.photos/seed/{item_idx}/400/300",
+                        image_url=meta.get("image_url"),
                         in_stock=True,
                         popularity_score=max(0, 500 - item_idx),
                     )
                     db.add(p)
             db.flush()
             print(f"[OK] Seeded 500 catalog items into PostgreSQL/SQLite database.")
+
+        # Update existing products with matching image_url if they have placeholder picsum URLs
+        outdated_images = db.query(Product).filter(
+            Product.organization_id == org.id,
+            (Product.image_url.like("%picsum.photos%") | (Product.image_url == None))  # noqa: E711
+        ).all()
+        if outdated_images:
+            print(f"[INFO] Upgrading {len(outdated_images)} product images from placeholder to verified tech photography...")
+            for p in outdated_images:
+                meta = get_item_metadata(p.item_id_numeric)
+                p.image_url = meta.get("image_url")
+            db.flush()
+            print(f"[OK] Successfully upgraded {len(outdated_images)} product images.")
 
         # 5. Seed Demo API Key
         hashed_demo_key = hash_api_key(DEMO_API_KEY_SECRET)

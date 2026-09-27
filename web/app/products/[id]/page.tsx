@@ -22,6 +22,7 @@ import {
   Product,
   RecommendationItem,
 } from "@/lib/api";
+import { getProductImageUrl } from "@/lib/productImage";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -64,12 +65,19 @@ export default function ProductDetailPage() {
     if (!product) return;
     sendEvent(currentUserId, product.item_id_numeric, "add_to_cart").catch(() => {});
 
+    const productImage = getProductImageUrl(
+      product.image_url,
+      product.title,
+      undefined,
+      product.item_id_numeric
+    );
+
     const currentCart = JSON.parse(localStorage.getItem("reco_cart") || "[]");
     currentCart.push({
       item_id: product.item_id_numeric,
       title: product.title,
       price: product.price,
-      image_url: product.image_url,
+      image_url: productImage,
     });
     localStorage.setItem("reco_cart", JSON.stringify(currentCart));
     window.dispatchEvent(new Event("cart_updated"));
@@ -106,6 +114,13 @@ export default function ProductDetailPage() {
     );
   }
 
+  const productImage = getProductImageUrl(
+    product.image_url,
+    product.title,
+    undefined,
+    product.item_id_numeric
+  );
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       {/* Back button */}
@@ -123,7 +138,7 @@ export default function ProductDetailPage() {
         <div className="space-y-4">
           <div className="aspect-square rounded-2xl overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center p-8">
             <img
-              src={product.image_url || `https://picsum.photos/seed/${product.item_id_numeric}/600/600`}
+              src={productImage}
               alt={product.title}
               className="w-full h-full object-contain"
             />

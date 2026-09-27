@@ -114,7 +114,7 @@ def get_similar_products(
             price=float(meta.get("price", 99.99)),
             rating=float(meta.get("rating", 4.8)),
             badge=meta.get("badge"),
-            image_url=f"https://picsum.photos/seed/{item_id}/400/300",
+            image_url=meta.get("image_url"),
             in_stock=True,
             score=round(max(0.2, 0.95 - (rank * 0.1)), 3),
             rank=rank + 1,

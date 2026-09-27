@@ -226,6 +226,9 @@ class RecommendationPipeline:
                 rating = db_p.rating
                 badge = db_p.badge
                 image_url = db_p.image_url
+                if not image_url or "picsum.photos" in image_url:
+                    meta = get_item_metadata(item_id)
+                    image_url = meta.get("image_url")
             else:
                 meta = get_item_metadata(item_id)
                 title = meta.get("title", f"Product {item_id}")
@@ -233,7 +236,7 @@ class RecommendationPipeline:
                 price = meta.get("price", 99.99)
                 rating = meta.get("rating", 4.8)
                 badge = meta.get("badge")
-                image_url = f"https://picsum.photos/seed/{item_id}/400/300"
+                image_url = meta.get("image_url")
 
             if title in seen_titles:
                 continue
@@ -294,7 +297,7 @@ class RecommendationPipeline:
                     "price": meta.get("price", 99.99),
                     "rating": meta.get("rating", 4.8),
                     "badge": meta.get("badge", "Popular"),
-                    "image_url": f"https://picsum.photos/seed/{backfill_id}/400/300",
+                    "image_url": meta.get("image_url"),
                     "in_stock": True,
                     "score": round(max(0.05, 0.4 - (len(enriched_list) * 0.03)), 3),
                     "rank": len(enriched_list) + 1,

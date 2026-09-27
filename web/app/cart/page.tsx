@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ShoppingCart, Trash2, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import { sendEvent } from "@/lib/api";
+import { getProductImageUrl } from "@/lib/productImage";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any[]>([]);
@@ -123,7 +124,7 @@ export default function CartPage() {
               >
                 <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200">
                   <img
-                    src={item.image_url || `https://picsum.photos/seed/${item.item_id}/100/100`}
+                    src={getProductImageUrl(item.image_url, item.title, undefined, item.item_id)}
                     alt={item.title}
                     className="w-full h-full object-cover"
                   />
