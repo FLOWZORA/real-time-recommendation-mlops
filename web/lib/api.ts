@@ -120,6 +120,7 @@ export const TEST_PERSONAS = [
   { id: "42", name: "Sarah Jenkins", role: "Tech Creator & Streamer", segment: "Cameras, Lights & Studio Gear", avatar: "🎙️" },
   { id: "64", name: "Chloe Rivera", role: "Ergonomics & Interior Architect", segment: "Premium Ergonomics & Lifestyle", avatar: "🪴" },
   { id: "89", name: "Marcus Vance", role: "Workplace Minimalist", segment: "Displays, Docks & Ultrabooks", avatar: "💻" },
+  { id: "55", name: "Max Sterling", role: "Fitness & Athletic Performance", segment: "Fitness Tech & Athletic Lifestyle", avatar: "🏋️" },
   { id: "999", name: "Elena Rostova", role: "New Visitor", segment: "Cold-Start (Popularity Fallback)", avatar: "✨" },
 ];
 

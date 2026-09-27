@@ -49,18 +49,23 @@ const FALLBACK_COLLECTIONS: Record<string, string[]> = {
     "https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=600&q=80",
   ],
   power_bank: [
-    "https://images.unsplash.com/photo-1621259182978-fbf93132d53d?auto=format&fit=crop&w=600&q=80",
+    "https://upload.wikimedia.org/wikipedia/commons/7/75/Portable_power_bank.jpg",
+    "https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=600&q=80",
   ],
   charger: [
     "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
     "https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80",
   ],
-  standing_desk: [
-    "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80",
+  herman_miller: [
+    "https://upload.wikimedia.org/wikipedia/commons/b/b6/Aeron_Chair_at_Design_Show_2003.jpg",
   ],
   chair: [
-    "https://images.unsplash.com/photo-1589384267710-7a170981ca78?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1579487785947-84da60b19c09?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1505797149-43b0069ec26b?auto=format&fit=crop&w=600&q=80",
+  ],
+  standing_desk: [
+    "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80",
   ],
   coffee_maker: [
     "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
@@ -68,6 +73,12 @@ const FALLBACK_COLLECTIONS: Record<string, string[]> = {
   ],
   smart_mug: [
     "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80",
+  ],
+  fitness: [
+    "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
   ],
   keyboard: [
     "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
@@ -86,6 +97,7 @@ const FALLBACK_COLLECTIONS: Record<string, string[]> = {
 };
 
 const PATTERNS: [string, RegExp][] = [
+  ["herman_miller", /\b(herman miller|aeron)\b/i],
   ["earbuds", /\b(earbud|earbuds|in-ear|ear \(2\)|airpods pro)\b/i],
   ["headphones_overear", /\b(headphone|headphones|headset|headsets|wh-1000xm|airpods max|bathys|ath-m50x|aonic|hd 660s2|dac)\b/i],
   ["speaker", /\b(speaker|speakers|stanmore|era 300|soundcore|homepod)\b/i],
@@ -97,10 +109,11 @@ const PATTERNS: [string, RegExp][] = [
   ["wood_stand", /\b(monitor stand|desk shelf|riser|wood stand)\b/i],
   ["display", /\b(monitor|monitors|display|displays|ultrasharp|ultrawide|proart|odyssey)\b/i],
   ["dock_hub", /\b(dock|docks|docking|hub|hubs|adapter|adapters)\b/i],
-  ["power_bank", /\b(power bank|powercore|battery|kindle)\b/i],
+  ["power_bank", /\b(power bank|powercore|battery|kindle|portable charger)\b/i],
   ["charger", /\b(charger|chargers|charging|gan|magsafe|magnetic wireless|plug|power meter)\b/i],
   ["standing_desk", /\b(standing desk|uplift)\b/i],
-  ["chair", /\b(chair|chairs|aeron|steelcase|seating)\b/i],
+  ["fitness", /\b(fitness|workout|gym|athletic|smartwatch|band|shaker|running)\b/i],
+  ["chair", /\b(chair|chairs|steelcase|seating)\b/i],
   ["coffee_maker", /\b(coffee|grinder|kettle|aeropress|pour-over|brew)\b/i],
   ["smart_mug", /\b(mug|mugs|tumbler|tumblers|cup|kinto|yeti|ember)\b/i],
   ["keyboard", /\b(keyboard|keyboards|keychron|nuphy|hhkb|wooting|mechanical)\b/i],
