@@ -156,8 +156,8 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
 }
 
 // Products
-export const getProducts = (category?: string, search?: string) => {
-  let q = "/v1/products?limit=50";
+export const getProducts = (category?: string, search?: string, limit: number = 50, skip: number = 0) => {
+  let q = `/v1/products?limit=${limit}&skip=${skip}`;
   if (category && category !== "All") q += `&category_name=${encodeURIComponent(category)}`;
   if (search) q += `&search=${encodeURIComponent(search)}`;
   return fetchApi<Product[]>(q);

@@ -20,13 +20,16 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const loadProducts = async () => {
+  const loadProducts = async (limit: number = 50) => {
     setLoading(true);
     try {
       const data = await getProducts(
         selectedCategory === "All" ? undefined : selectedCategory,
-        searchQuery || undefined
+        searchQuery || undefined,
+        limit,
+        0
       );
       setProducts(data);
     } catch (e) {
@@ -36,13 +39,34 @@ export default function ProductsPage() {
     }
   };
 
+  const handleLoadMore = async () => {
+    setLoadingMore(true);
+    try {
+      const more = await getProducts(
+        selectedCategory === "All" ? undefined : selectedCategory,
+        searchQuery || undefined,
+        50,
+        products.length
+      );
+      setProducts((prev) => [...prev, ...more]);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const handleShowAll = async () => {
+    await loadProducts(500);
+  };
+
   useEffect(() => {
-    loadProducts();
+    loadProducts(50);
   }, [selectedCategory]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loadProducts();
+    loadProducts(50);
   };
 
   return (
@@ -76,37 +100,64 @@ export default function ProductsPage() {
         </form>
       </div>
 
-      {/* Category Filter Chips */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
-        <Filter className="w-4 h-4 text-slate-400 shrink-0 mr-1" />
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all shadow-sm ${
-              selectedCategory === cat
-                ? "bg-gradient-to-r from-[#1dc4e9] to-[#a389d4] text-white shadow-cyan-500/20"
-                : "bg-white dark:bg-[#2b2c2f] text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      {/* Category Filter Chips & Count Status */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+          <Filter className="w-4 h-4 text-slate-400 shrink-0 mr-1" />
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all shadow-sm ${
+                selectedCategory === cat
+                  ? "bg-gradient-to-r from-[#1dc4e9] to-[#a389d4] text-white shadow-cyan-500/20"
+                  : "bg-white dark:bg-[#2b2c2f] text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <div className="text-xs font-mono text-slate-500 dark:text-slate-400 shrink-0">
+          Showing <span className="font-bold text-cyan-600 dark:text-cyan-400">{products.length}</span> of 500 Products
+        </div>
       </div>
 
       {/* Product Grid */}
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="datta-card h-72 animate-pulse bg-slate-100 dark:bg-slate-800" />
+            <div key={i} className="datta-card h-72 animate-pulse bg-slate-100 dark:bg-slate-800 rounded-2xl" />
           ))}
         </div>
       ) : products.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id || product.item_id_numeric} product={product} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.id || product.item_id_numeric} product={product} />
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          {products.length < 500 && (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 pb-4">
+              <button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                className="px-5 py-2.5 rounded-xl text-xs font-bold bg-white dark:bg-[#2b2c2f] border border-slate-200 dark:border-slate-700 hover:border-cyan-500 text-slate-800 dark:text-slate-200 shadow-sm transition-all"
+              >
+                {loadingMore ? "Loading Next 50..." : "Load Next 50 Products"}
+              </button>
+              <button
+                onClick={handleShowAll}
+                className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#1dc4e9] to-[#a389d4] hover:opacity-95 text-white shadow-md shadow-cyan-500/20 transition-all"
+              >
+                Load All 500 Products
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="datta-card text-center py-16 p-6">
           <p className="text-slate-500 text-sm">No products found matching your filter.</p>

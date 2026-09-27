@@ -12,7 +12,7 @@ export default function DashboardProductsPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await getProducts(undefined, search || undefined);
+      const data = await getProducts(undefined, search || undefined, 500);
       setProducts(data);
     } catch (e) {
       console.error(e);

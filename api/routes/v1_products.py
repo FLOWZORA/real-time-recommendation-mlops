@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Response
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -12,12 +12,13 @@ router = APIRouter(prefix="/v1/products", tags=["Products"])
 
 @router.get("", response_model=List[ProductResponse])
 def list_products(
+    response: Response,
     category_id: Optional[str] = None,
     category_name: Optional[str] = None,
     search: Optional[str] = None,
     in_stock: Optional[bool] = None,
     skip: int = Query(0, ge=0),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=500),
     ctx: AuthContext = Depends(get_auth_context),
     db: Session = Depends(get_db),
 ):
@@ -36,6 +37,9 @@ def list_products(
 
     if in_stock is not None:
         query = query.filter(Product.in_stock == in_stock)
+
+    total_count = query.count()
+    response.headers["X-Total-Count"] = str(total_count)
 
     products = query.order_by(Product.item_id_numeric.asc()).offset(skip).limit(limit).all()
     return products
